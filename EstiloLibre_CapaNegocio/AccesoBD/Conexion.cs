@@ -10,6 +10,7 @@ namespace EstiloLibre_CapaNegocio.AccesoBD
         #region ***** PROPIEDADES INTERNAS *****
 
         private DatosSesion _datosDeSesion;
+        private static object _objetoDeBloqueo = new Object();
 
         #endregion
 
@@ -38,8 +39,6 @@ namespace EstiloLibre_CapaNegocio.AccesoBD
         //        }
         //    }
         //}
-
-        private static object ObjetoDeBloqueo = new Object();
 
         #endregion
 
@@ -136,7 +135,7 @@ namespace EstiloLibre_CapaNegocio.AccesoBD
             };
 
             return datosDeSesion;
-        }            
+        }
 
         #endregion
 
@@ -150,19 +149,19 @@ namespace EstiloLibre_CapaNegocio.AccesoBD
 
         public bool UsuarioActualCumplePermisos(IEnumerable<string> lstCodigosPermisos)
         {
-            if (lstCodigosPermisos ==  null || !lstCodigosPermisos.Any())
+            if (lstCodigosPermisos == null || !lstCodigosPermisos.Any())
             {
                 return false;
             }
 
-            if (UsuarioAutenticado.Permisos == null || !UsuarioAutenticado.Permisos.Any())
+            if (this.UsuarioAutenticado.Permisos == null || !this.UsuarioAutenticado.Permisos.Any())
             {
                 return false;
             }
 
             foreach (string permiso in lstCodigosPermisos)
             {
-                if (!UsuarioAutenticado.Permisos.Contains(permiso))
+                if (!this.UsuarioAutenticado.Permisos.Contains(permiso))
                 {
                     return false;
                 }

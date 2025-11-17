@@ -9,15 +9,17 @@ namespace EstiloLibre.Filtros
 
         public FiltroAbrirCerrarConexion(Conexion con)
         {
-            _con = con;
+            this._con = con;
         }
+
         public void OnResourceExecuting(ResourceExecutingContext context)
         {
-            _con.Conectar();
+            this._con.Conectar();
         }
+
         public void OnResourceExecuted(ResourceExecutedContext context)
         {
-            _con.Desconectar();
+            this._con.Desconectar();
         }
     }
 }

@@ -6,7 +6,7 @@ using System.Runtime.Caching;
 namespace EstiloLibre_CapaNegocio.AccesoBD
 {
     public partial class Conexion
-    {       
+    {
         #region  Idiomas 
 
         internal IdiomasDAO GetDAOIdiomas()
@@ -16,7 +16,7 @@ namespace EstiloLibre_CapaNegocio.AccesoBD
 
         internal Idioma CrearIdioma()
         {
-            return (Idioma) this.GetDAOIdiomas().CrearObjetoBD();
+            return (Idioma)this.GetDAOIdiomas().CrearObjetoBD();
         }
 
         internal Idioma CargarIdioma(string strCodigo)
@@ -30,7 +30,7 @@ namespace EstiloLibre_CapaNegocio.AccesoBD
 
         //internal Idiomas CargarIdiomas()
         //{
-        //    lock (ObjetoDeBloqueo)
+        //    lock (_objetoDeBloqueo)
         //    {
         //        if (!MemoryCache.Default.Contains("Idiomas"))
         //        {
@@ -51,22 +51,20 @@ namespace EstiloLibre_CapaNegocio.AccesoBD
 
         public Usuario CrearUsuario()
         {
-            return (Usuario)GetDAOUsuarios().CrearObjetoBD();
+            return (Usuario)this.GetDAOUsuarios().CrearObjetoBD();
         }
 
-        public Usuario CargarUsuario(int iUsuarioId)
+        public Usuario? CargarUsuario(int iUsuarioId)
         {
-            return new();
-            //return (Usuario)this.GetDAOUsuarios().CargarObjetoBD("Id", iUsuarioId, TipoDatoBD.NumeroEntero);
+            return this.GetDAOUsuarios().CargarUsuario(iUsuarioId);
         }
 
-        public Usuario CargarUsuario(string strLogin)
+        public Usuario? CargarUsuario(string strLogin)
         {
-            return new();
-            //return (Usuario)this.GetDAOUsuarios().CargarObjetoBD("Login", strLogin, TipoDatoBD.String);
+            return this.GetDAOUsuarios().CargarUsuarioPorLogin(strLogin);
         }
 
-        public Usuario CargarUsuarioActual()
+        public Usuario? CargarUsuarioActual()
         {
             return this.CargarUsuario(this.UsuarioAutenticado.Id);
         }

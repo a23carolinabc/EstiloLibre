@@ -30,7 +30,7 @@ namespace EstiloLibre_CapaNegocio.Comandos
 
         public Task<int> Handle(CmdUsuariosSaveData comando, CancellationToken cancellationToken)
         {
-            Usuario usuario;
+            Usuario? usuario;
 
             base.VericarPermisos(comando);
 
