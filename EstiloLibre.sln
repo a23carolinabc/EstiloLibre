@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.10.35013.160
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EstiloLibre", "EstiloLibre\EstiloLibre.csproj", "{BE3953F2-47F2-4DCF-8461-7CE10C36C951}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EstiloLibre_CapaNegocio", "EstiloLibre_CapaNegocio\EstiloLibre_CapaNegocio.csproj", "{115B6A8D-8D52-4205-ADD4-3F5E1739FB15}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BE3953F2-47F2-4DCF-8461-7CE10C36C951}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BE3953F2-47F2-4DCF-8461-7CE10C36C951}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BE3953F2-47F2-4DCF-8461-7CE10C36C951}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BE3953F2-47F2-4DCF-8461-7CE10C36C951}.Release|Any CPU.Build.0 = Release|Any CPU
+		{115B6A8D-8D52-4205-ADD4-3F5E1739FB15}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{115B6A8D-8D52-4205-ADD4-3F5E1739FB15}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{115B6A8D-8D52-4205-ADD4-3F5E1739FB15}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{115B6A8D-8D52-4205-ADD4-3F5E1739FB15}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {45F5F88C-006A-4150-8F53-C2B32C2E4AB6}
+	EndGlobalSection
+EndGlobal

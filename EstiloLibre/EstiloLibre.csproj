@@ -1,0 +1,66 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Azure.Messaging.ServiceBus" Version="7.18.4" />
+        <PackageReference Include="MediatR" Version="12.4.1" />
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.7" />
+        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="8.0.12" />
+        <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="8.0.7" />
+        <PackageReference Include="Microsoft.Data.SqlClient" Version="5.2.2" />
+        <PackageReference Include="Serilog" Version="4.2.0" />
+        <PackageReference Include="Serilog.AspNetCore" Version="9.0.0" />
+        <PackageReference Include="Serilog.Settings.Configuration" Version="9.0.0" />
+        <PackageReference Include="Serilog.Sinks.File" Version="6.0.0" />
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
+        <PackageReference Include="System.Data.SqlClient" Version="4.8.6" />
+        <PackageReference Include="System.Drawing.Common" Version="9.0.1" />
+        <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.0.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\EstiloLibre_CapaNegocio\EstiloLibre_CapaNegocio.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <_ConsultasSQL Include="$(MSBuildProjectDirectory)/../EstiloLibre_CapaNegocio/ConsultasSQL/**/*" />
+        <DotNetPublishFiles Include="@(_ConsultasSQL)">
+            <DestinationRelativePath>ConsultasSQL/%(RecursiveDir)%(Filename)%(Extension)</DestinationRelativePath>
+        </DotNetPublishFiles>
+        <_Plantillas Include="$(MSBuildProjectDirectory)/../EstiloLibre_CapaNegocio/Plantillas/**/*" />
+        <Compile Remove="AplicacionCliente\**" />
+        <Compile Remove="Plantillas\**" />
+        <Content Remove="AplicacionCliente\**" />
+        <Content Remove="Plantillas\**" />
+        <EmbeddedResource Remove="AplicacionCliente\**" />
+        <EmbeddedResource Remove="Plantillas\**" />
+        <None Remove="AplicacionCliente\**" />
+        <None Remove="Plantillas\**" />
+        <DotNetPublishFiles Include="@(_Plantillas)">
+            <DestinationRelativePath>Plantillas/%(RecursiveDir)%(Filename)%(Extension)</DestinationRelativePath>
+        </DotNetPublishFiles>
+    </ItemGroup>
+    
+    <ItemGroup>
+        <Content Update="appsettings.*.json" CopyToPublishDirectory="Never" />
+        <Content Update="appsettings.Docker.json">
+          <CopyToPublishDirectory>Never</CopyToPublishDirectory>
+        </Content>
+        <Content Update="appsettings.json" CopyToPublishDirectory="Never" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Content Update="appsettings.Development.json">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Update="appsettings.json">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+    </ItemGroup>
+
+</Project>

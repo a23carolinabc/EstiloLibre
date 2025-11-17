@@ -1,0 +1,133 @@
+﻿using Microsoft.AspNetCore.Mvc;
+using EstiloLibre.Filtros;
+using EstiloLibre.Servicios;
+using EstiloLibre_CapaNegocio.AccesoBD;
+using EstiloLibre_CapaNegocio.ObjetosDTO.Seguridad;
+using System.Net;
+
+namespace EstiloLibre.Controllers
+{
+    [Route("api/[controller]")]
+    [ApiController]
+    [ResponseCache(NoStore = true, Duration = 0, Location = ResponseCacheLocation.None)]
+    [ServiceFilter(typeof(FiltroAbrirCerrarConexion))]
+    public class SeguridadController : ControllerBase
+    {
+        #region ***** PROPIEDADES *****
+
+        private readonly ServicioIdentidadTokenJwt _servicioIdentidad;
+        private readonly ServicioCredencialesCabecera _servicioCredencialesCabecera;
+        private readonly Conexion _con;
+
+        #endregion
+
+        #region ***** CONSTRUCTORES *****
+
+        public SeguridadController(ServicioIdentidadTokenJwt servicioIdentidad,
+                                   IConfiguration configuration,                                   
+                                   Conexion conexion,
+                                   ServicioCredencialesCabecera servicioCredencialesCabecera)
+        {
+            this._servicioIdentidad = servicioIdentidad;
+            this._con = conexion;
+            this._servicioCredencialesCabecera = servicioCredencialesCabecera;
+        }
+
+        #endregion
+
+        #region ***** MÉTODOS PÚBLICOS *****
+        [Route("autenticar")]
+        [HttpGet]
+        [ProducesResponseType(typeof(string), (int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
+        public IActionResult Autentificar()
+        {
+            string strToken;
+            CredencialesUsuario credenciales;
+            ResultadoAutentificacion resultadoAutenticacion;
+            DatosSesionDTO datosDeSesion;
+
+            //Obtenemos la cabecera Authorization
+            string? authHeader = this.HttpContext.Request.Headers.Authorization;
+            if (string.IsNullOrEmpty(authHeader))
+            {
+                return Unauthorized("");
+            }
+
+            //Decodificamos la cabecera
+            credenciales = this._servicioCredencialesCabecera.ObtenerCredenciales(authHeader);
+
+            //Comprobar credenciales de acceso en capa negocio.
+            resultadoAutenticacion = this._servicioIdentidad.AutentificarUsuarioEnCapaNegocio(credenciales);
+
+            //Si el usuario no existe en la BD o este está deshabilitado, devolver un error.
+            if (!resultadoAutenticacion.Correcto)
+            {
+                return Unauthorized("");
+            }
+            //Construir el token si las credenciales son correctas.
+            strToken = this._servicioIdentidad.GenerarToken(resultadoAutenticacion.UsuarioAutenticado, bElUsuarioEsPersona: true);
+
+            //Cargar los datos de sesión.
+            datosDeSesion = this._con.GetDatosDeSesion(resultadoAutenticacion.UsuarioAutenticado.Id);
+
+            //Devolver respuesta.
+            return Ok(new { Token = strToken, DatosDeSesion = datosDeSesion });
+        }
+
+        [Route("autenticarPrueba")]
+        [HttpGet]
+        [ProducesResponseType(typeof(string), (int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
+        public IActionResult AutentificarPrueba()
+        {
+            string strToken;
+            CredencialesUsuario credenciales;
+            ResultadoAutentificacion resultadoAutenticacion;
+            DatosSesionDTO datosDeSesion;
+
+            credenciales = new CredencialesUsuario()
+            {
+                Login = "admin",
+                Contraseña = "f2e53c927c66fe711e8e88ef9b37a8e3187f1652216b313fc8eb2513883dd360"
+            };
+
+            //Comprobar credenciales de acceso en capa negocio.
+            resultadoAutenticacion = this._servicioIdentidad.AutentificarUsuarioEnCapaNegocio(credenciales);
+
+            //Si el usuario no existe en la BD o este está deshabilitado, devolver un error.
+            if (!resultadoAutenticacion.Correcto)
+            {
+                return Unauthorized("");
+            }
+            //Construir el token si las credenciales son correctas.
+            strToken = this._servicioIdentidad.GenerarToken(resultadoAutenticacion.UsuarioAutenticado, bElUsuarioEsPersona: true);
+
+            //Cargar los datos de sesión.
+            datosDeSesion = this._con.GetDatosDeSesion(resultadoAutenticacion.UsuarioAutenticado.Id);
+
+            //Devolver respuesta.
+            return Ok(new { Token = strToken, DatosDeSesion = datosDeSesion });
+        }
+
+        [Route("getDatosSesion")]
+        [HttpGet]
+        [ProducesResponseType(typeof(DatosSesionDTO), (int)HttpStatusCode.OK)]
+        [ServiceFilter(typeof(FiltroAbrirCerrarConexion))]
+        [ServiceFilter(typeof(FiltroIdentificacion))]
+        public ActionResult<DatosSesionDTO> GetDatosDeSesion()
+        {
+            DatosSesionDTO datosDeSesion;
+
+            //Cargar los datos de sesión.
+            datosDeSesion = this._con.GetDatosDeSesion(this._con.UsuarioAutenticado.Id);
+
+            //Devolver el resultado de la ejecución.
+            return Ok(datosDeSesion);
+        }
+
+        #endregion
+    }
+}
