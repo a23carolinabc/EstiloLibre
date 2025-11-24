@@ -106,7 +106,7 @@ namespace EstiloLibre.Controllers
             strToken = this._servicioIdentidad.GenerarToken(resultadoAutenticacion.UsuarioAutenticado, bElUsuarioEsPersona: true);
 
             //Cargar los datos de sesión.
-            datosDeSesion = this._con.GetDatosDeSesion(resultadoAutenticacion.UsuarioAutenticado.Id);
+            datosDeSesion = this._con.GetDatosDeSesion(resultadoAutenticacion.UsuarioAutenticado);
 
             //Devolver respuesta.
             return Ok(new { Token = strToken, DatosDeSesion = datosDeSesion });

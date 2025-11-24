@@ -137,6 +137,23 @@ namespace EstiloLibre_CapaNegocio.AccesoBD
             return datosDeSesion;
         }
 
+        public DatosSesionDTO GetDatosDeSesion(UsuarioAutenticadoDTO usuario)
+        {
+            DatosSesionDTO datosDeSesion;
+
+            if (usuario == null)
+            {
+                throw new ArgumentNullException(nameof(usuario));
+            }
+
+            datosDeSesion = new DatosSesionDTO()
+            {
+                CodigoIdioma = "1"
+                //CodigoIdioma = this.CargarIdioma(usuario.IdiomaId.ToString()).Codigo
+            };
+
+            return datosDeSesion;
+        }
         #endregion
 
         #region "***** MÉTODOS PRIVADOS *****"      

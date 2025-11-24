@@ -1,9 +1,7 @@
-﻿using DocumentFormat.OpenXml.Office2010.CustomUI;
-using EstiloLibre_CapaNegocio.AccesoBD;
-using EstiloLibre_CapaNegocio.Colecciones;
+﻿using EstiloLibre_CapaNegocio.AccesoBD;
 using EstiloLibre_CapaNegocio.Objetos;
 using EstiloLibre_CapaNegocio.Utils;
-using MySql.Data.MySqlClient;
+using MySqlConnector;
 using System.Data;
 
 namespace EstiloLibre_CapaNegocio.ContenedoresDatos
@@ -29,7 +27,7 @@ namespace EstiloLibre_CapaNegocio.ContenedoresDatos
             return @$"
                 SELECT *
                 FROM {TablasBD.Usuarios} p
-                WHERE p.Id = @personaId;
+                WHERE p.Id = @iUsuarioId;
 
                 SELECT p.* 
                 FROM {TablasBD.Permisos} p 
@@ -50,7 +48,6 @@ namespace EstiloLibre_CapaNegocio.ContenedoresDatos
         {
             DataSet datos;
             DataTable tabla;
-            Usuario usuario;
             List<string> permisos;
 
             this.AgregarParametro("iUsuarioId", iUsuarioId, MySqlDbType.Int32);
@@ -58,8 +55,8 @@ namespace EstiloLibre_CapaNegocio.ContenedoresDatos
             // Ejecutar consulta
             datos = this.EjecutarConsulta();
 
-            usuario = new Usuario();
-            usuario.IniciarListaPermisos();
+            this.Usuario = new Usuario();
+            this.Usuario.IniciarListaPermisos();
 
             // Asignar datos del usuario
             if (this.TablaTieneDatos("Usuario"))
@@ -68,19 +65,17 @@ namespace EstiloLibre_CapaNegocio.ContenedoresDatos
 
                 foreach (DataRow fila in tabla.Rows)
                 {
-                    usuario = new Usuario()
-                    {
-                        Login = UtilsConversion.GetString(fila["Login"])!,
-                        Contraseña = UtilsConversion.GetString(fila["Contraseña"])!,
-                        Nombre = UtilsConversion.GetString(fila["Nombre"])!,
-                        Apellido1 = UtilsConversion.GetString(fila["Apellido1"])!,
-                        Apellido2 = UtilsConversion.GetString(fila["Apellido2"]),
-                        FechaNacimiento = UtilsConversion.GetDateTime(fila["FechaNacimiento"]),
-                        CorreoE = UtilsConversion.GetString(fila["CorreoE"]),
-                        Telefono = UtilsConversion.GetInt(fila["Telefono"]),
-                        FechaBaja = UtilsConversion.GetDateTime(fila["FechaBaja"]),
-                        Publico = UtilsConversion.GetBool(fila["Publico"])
-                    };
+                    this.Usuario.Id = UtilsConversion.GetInt(fila["Id"]) ?? 0;
+                    this.Usuario.Login = UtilsConversion.GetString(fila["Login"])!;
+                    this.Usuario.Contraseña = UtilsConversion.GetString(fila["Contraseña"])!;
+                    this.Usuario.Nombre = UtilsConversion.GetString(fila["Nombre"])!;
+                    this.Usuario.Apellido1 = UtilsConversion.GetString(fila["Apellido1"])!;
+                    this.Usuario.Apellido2 = UtilsConversion.GetString(fila["Apellido2"]);
+                    this.Usuario.FechaNacimiento = UtilsConversion.GetDateTime(fila["FechaNacimiento"]);
+                    this.Usuario.CorreoE = UtilsConversion.GetString(fila["CorreoE"]);
+                    this.Usuario.Telefono = UtilsConversion.GetInt(fila["Telefono"]);
+                    this.Usuario.FechaBaja = UtilsConversion.GetDateTime(fila["FechaBaja"]);
+                    this.Usuario.Publico = UtilsConversion.GetBool(fila["Publico"]);
                 }
             }
 

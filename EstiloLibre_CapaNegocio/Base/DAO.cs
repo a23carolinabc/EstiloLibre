@@ -66,16 +66,14 @@ namespace EstiloLibre_CapaNegocio.Base
 
             if (iId <= 0) return null;
 
-            using (conexion = this.Conexion.ConexionBD.GetConexion())
+            conexion = this.Conexion.ConexionBD.GetConexion();
+            objetoBD = conexion.Get<T>(iId);
+            if (objetoBD != null)
             {
-                objetoBD = conexion.Get<T>(iId);
-                if (objetoBD != null)
-                {
-                    objetoBD.DAO = this;
-                }
-
-                return objetoBD;
+                objetoBD.DAO = this;
             }
+
+            return objetoBD;
         }
 
         public ObjetoBD? CargarObjetoBD(string clausulaWhere, string? orderBy = null)
@@ -89,17 +87,15 @@ namespace EstiloLibre_CapaNegocio.Base
             {
                 strSql = $" ORDER BY {orderBy}";
             }
-                        
-            using (conexion = this.Conexion.ConexionBD.GetConexion())
-            {
-                objetoBD = conexion.QueryFirstOrDefault<T>(strSql);
-                if (objetoBD != null)
-                {
-                    objetoBD.DAO = this;
-                }
 
-                return objetoBD;
+            conexion = this.Conexion.ConexionBD.GetConexion();
+            objetoBD = conexion.QueryFirstOrDefault<T>(strSql);
+            if (objetoBD != null)
+            {
+                objetoBD.DAO = this;
             }
+
+            return objetoBD;
         }
 
         public void GuardarObjetoBD(ObjetoBD objeto)
@@ -107,30 +103,28 @@ namespace EstiloLibre_CapaNegocio.Base
             IDbConnection conexion;
             T obj = (T)objeto;
 
-            using (conexion = this.Conexion.ConexionBD.GetConexion())
+            conexion = this.Conexion.ConexionBD.GetConexion();
+            if (obj.Id <= 0)
             {
-                if (obj.Id <= 0)
+                // Recoger id generado
+                long nuevoId = conexion.Insert<T>(obj);
+
+                if (nuevoId <= 0)
                 {
-                    // Recoger id generado
-                    long nuevoId = conexion.Insert<T>(obj);
-
-                    if (nuevoId <= 0)
-                    {
-                        throw new CapaNegocioException($"No se pudo crear el objeto");
-                    }
-
-                    // Actualizar id del objeto usando reflexión
-                    var propertyInfo = typeof(T).BaseType?.GetProperty("Id",
-                        System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-                    propertyInfo?.SetValue(obj, Convert.ToInt32(nuevoId));
+                    throw new CapaNegocioException($"No se pudo crear el objeto");
                 }
-                else
+
+                // Actualizar id del objeto usando reflexión
+                var propertyInfo = typeof(T).BaseType?.GetProperty("Id",
+                    System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+                propertyInfo?.SetValue(obj, Convert.ToInt32(nuevoId));
+            }
+            else
+            {
+                bool actualizado = conexion.Update<T>(obj);
+                if (!actualizado)
                 {
-                    bool actualizado = conexion.Update<T>(obj);
-                    if (!actualizado)
-                    {
-                        throw new CapaNegocioException($"No se pudo actualizar el objeto con Id {obj.Id}");
-                    }
+                    throw new CapaNegocioException($"No se pudo actualizar el objeto con Id {obj.Id}");
                 }
             }
         }
@@ -138,6 +132,7 @@ namespace EstiloLibre_CapaNegocio.Base
         public void EliminarObjetoBD(ObjetoBD objeto)
         {
             IDbConnection conexion;
+            bool eliminado;
 
             T obj = (T)objeto;
 
@@ -146,30 +141,27 @@ namespace EstiloLibre_CapaNegocio.Base
                 throw new CapaNegocioException("No se puede eliminar un objeto sin Id asociado");
             }
 
-            using (conexion = this.Conexion.ConexionBD.GetConexion())
+            conexion = this.Conexion.ConexionBD.GetConexion();
+            eliminado = conexion.Delete<T>(obj);
+            if (!eliminado)
             {
-                bool eliminado = conexion.Delete<T>(obj);
-                if (!eliminado)
-                {
-                    throw new CapaNegocioException($"No se pudo eliminar el objeto con Id {obj.Id}");
-                }
+                throw new CapaNegocioException($"No se pudo eliminar el objeto con Id {obj.Id}");
             }
         }
 
         public ListaObjetosBD<T> CargarTodos()
         {
             ListaObjetosBD<T> lista;
+            IDbConnection conexion;
 
-            using (IDbConnection conexion = this.Conexion.ConexionBD.GetConexion())
+            conexion = this.Conexion.ConexionBD.GetConexion();
+            var resultado = conexion.GetAll<T>().ToList();
+            foreach (var obj in resultado)
             {
-                var resultado = conexion.GetAll<T>().ToList();
-                foreach (var obj in resultado)
-                {
-                    obj.DAO = this;
-                }
-                lista = new(resultado);
-                return lista;
+                obj.DAO = this;
             }
+            lista = new(resultado);
+            return lista;
         }
         #endregion
 

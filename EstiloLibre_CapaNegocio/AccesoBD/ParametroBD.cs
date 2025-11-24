@@ -1,4 +1,4 @@
-﻿using MySql.Data.MySqlClient;
+﻿using MySqlConnector;
 using System.Data;
 using System.Data.Common;
 
@@ -21,6 +21,11 @@ namespace EstiloLibre_CapaNegocio.AccesoBD
         {
             this._interno = new MySqlParameter(nombre, valor ?? DBNull.Value);
             this._interno.MySqlDbType = tipo;
+        }
+
+        internal MySqlParameter ParametroInterno
+        {
+            get => this._interno;
         }
 
         public override DbType DbType { 

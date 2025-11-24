@@ -59,11 +59,14 @@ namespace EstiloLibre_CapaNegocio.AccesoBD
         internal DbCommand CrearComando(string strSql, ParametroBD[] parametros, CommandType tipoComando = CommandType.Text)
         {
             DbCommand comando;
+            MySqlParameter[] parametrosMySql;
+
             comando = this.CrearComando(strSql, tipoComando);
 
             if (parametros != null && parametros.Length > 0)
             {
-                comando.Parameters.AddRange(parametros);
+                parametrosMySql = parametros.Select(p => p.ParametroInterno).ToArray();
+                comando.Parameters.AddRange(parametrosMySql);
             }
 
             return comando;

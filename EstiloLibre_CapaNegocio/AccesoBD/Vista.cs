@@ -1,5 +1,5 @@
 ﻿using EstiloLibre_CapaNegocio.Excepciones;
-using MySql.Data.MySqlClient;
+using MySqlConnector;
 using System.Data;
 using System.Data.Common;
 
