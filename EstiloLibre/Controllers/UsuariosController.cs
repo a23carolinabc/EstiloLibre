@@ -76,8 +76,8 @@ public class UsuariosController
             Apellidos = datosUsuarioAutenticado.Apellidos,
             Login = datosUsuarioAutenticado.Login,
             Permisos = new List<string>(datosUsuarioAutenticado.ListaPermisosAcceso),
-            //IdiomaActualId = datosUsuarioAutenticado.IdiomaId,
-            //CodigoIdiomaActual = datosUsuarioAutenticado.CodigoIdiomaActual
+            IdiomaActualId = datosUsuarioAutenticado.IdiomaId,
+            CodigoIdiomaActual = datosUsuarioAutenticado.CodigoIdiomaActual
         };
 
         //Construir el token si las credenciales son correctas.

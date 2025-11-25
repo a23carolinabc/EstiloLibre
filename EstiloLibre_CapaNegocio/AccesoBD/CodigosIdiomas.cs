@@ -2,7 +2,7 @@
 {
     public class CodigosIdiomas
     {
-        public const int Español = 1;
-        public const int Gallego = 2;
+        public const string Español = "es";
+        public const string Gallego = "gl";
     }
 }

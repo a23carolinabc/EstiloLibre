@@ -76,6 +76,7 @@ namespace EstiloLibre_CapaNegocio.ContenedoresDatos
                     this.Usuario.Telefono = UtilsConversion.GetInt(fila["Telefono"]);
                     this.Usuario.FechaBaja = UtilsConversion.GetDateTime(fila["FechaBaja"]);
                     this.Usuario.Publico = UtilsConversion.GetBool(fila["Publico"]);
+                    this.Usuario.IdiomaId = UtilsConversion.GetInt(fila["IdiomaId"])??0;
                 }
             }
 

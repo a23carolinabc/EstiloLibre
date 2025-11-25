@@ -48,7 +48,6 @@ namespace EstiloLibre.Servicios
                     ValidAudience = this._configAutenticacion.AudienciaToken,
                     ValidateIssuer = true,
                     ValidateAudience = true,
-                    //No nos interesa validar por tiempo porque quien controla el tiempo es AUTORI (vía cookie).
                     ValidateLifetime = false
                 };
 

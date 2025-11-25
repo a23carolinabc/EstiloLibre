@@ -21,24 +21,24 @@ namespace EstiloLibre_CapaNegocio.AccesoBD
         public EstiloLibre_CapaNegocio.Configuracion.Configuracion ConfiguracionEstiloLibre { get; set; }
         public bool bTransaccionPUIniciada { get; set; }
 
-        //public int IdiomaActualId 
-        //{ 
-        //    get
-        //    {
-        //        if (this._datosDeSesion != null && this._datosDeSesion.Idioma != null)
-        //        {
-        //            return this._datosDeSesion.Idioma.Id;
-        //        }
-        //        else if (this.UsuarioAutenticado.IdiomaActualId > 0)
-        //        {
-        //            return this.UsuarioAutenticado.IdiomaActualId;
-        //        }
-        //        else
-        //        {
-        //            throw new CapaNegocioException("No se ha establecido el idioma actual en el objeto Conexion.");
-        //        }
-        //    }
-        //}
+        public int IdiomaActualId
+        {
+            get
+            {
+                if (this._datosDeSesion != null && this._datosDeSesion.Idioma != null)
+                {
+                    return this._datosDeSesion.Idioma.Id;
+                }
+                else if (this.UsuarioAutenticado.IdiomaActualId > 0)
+                {
+                    return this.UsuarioAutenticado.IdiomaActualId;
+                }
+                else
+                {
+                    throw new CapaNegocioException("No se ha establecido el idioma actual en el objeto Conexion.");
+                }
+            }
+        }
 
         #endregion
 
@@ -148,8 +148,7 @@ namespace EstiloLibre_CapaNegocio.AccesoBD
 
             datosDeSesion = new DatosSesionDTO()
             {
-                CodigoIdioma = "1"
-                //CodigoIdioma = this.CargarIdioma(usuario.IdiomaId.ToString()).Codigo
+                CodigoIdioma = usuario.CodigoIdiomaActual
             };
 
             return datosDeSesion;

@@ -46,7 +46,7 @@ namespace EstiloLibre_CapaNegocio.Consultas
                     this.Apellido1 = usuario.Apellido1;
                     this.Apellido2 = usuario.Apellido2;
                     this.CorreoE = usuario.CorreoE;
-                    //this.IdiomaId = usuario.IdiomaId;
+                    this.IdiomaId = usuario.IdiomaId;
                     this.Activo = usuario.FechaBaja is null? true:false;
                 }
             }

@@ -30,12 +30,8 @@ public class PcmdActualizarDatosSesion
     {
         Usuario usuarioActual;
 
-        // Comprobar permisos de ejecución.
-        // No Necesario porque todos los usuarios pueden actualizar sus propios datos.
-
-        // Comprobaciones.
-        this.RealizarComprobaciones(comando);
-
+        // No es necesario comprobar permisos porque todos los usuarios pueden actualizar sus propios datos.
+                
         try
         {
             // Envolver todo el proceso en una transacción.
@@ -43,7 +39,7 @@ public class PcmdActualizarDatosSesion
 
             // Realizar la actualización.
             usuarioActual = con.CargarUsuarioActual();
-            //usuarioActual.IdiomaId = con.CargarIdioma(comando.NuevoCodigoIdioma).Id;
+            usuarioActual.IdiomaId = con.CargarIdioma(comando.NuevoCodigoIdioma).Id;
             usuarioActual.Guardar();
 
             // Confirmar la transacción.
@@ -60,17 +56,5 @@ public class PcmdActualizarDatosSesion
         }
     }
 
-    #endregion
-
-    private void RealizarComprobaciones(CmdActualizarDatosSesion comando)
-    {
-        Idioma nuevoIdioma;
-
-        // Comprobar que el identificador indicado se corresponda con un idioma soportado por el sistema.
-        nuevoIdioma = con.CargarIdioma(comando.NuevoCodigoIdioma);
-        if (nuevoIdioma == null)
-        {
-            throw new ReglaNegocioException("Usuarios_RN_001");
-        }
-    }
+    #endregion    
 }

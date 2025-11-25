@@ -19,5 +19,13 @@ internal class IdiomasDAO : DAO<Idioma>
     {
         return new Idioma(this);
     }
+    public Idioma? CargarIdioma(int iIdiomaId)
+    {
+        return (Idioma?)this.CargarObjetoBD(iIdiomaId);
+    }
+    public Idioma? CargarIdiomaPorLogin(string strCodigo)
+    {
+        return (Idioma?)this.CargarObjetoBD($"Codigo = '{strCodigo}'");
+    }
     #endregion
 }

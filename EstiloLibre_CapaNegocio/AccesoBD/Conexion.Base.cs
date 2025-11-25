@@ -19,26 +19,15 @@ namespace EstiloLibre_CapaNegocio.AccesoBD
             return (Idioma)this.GetDAOIdiomas().CrearObjetoBD();
         }
 
-        internal Idioma CargarIdioma(string strCodigo)
+        internal Idioma? CargarIdioma(int iIdiomaId)
         {
-            Predicate<Idioma> condicion;
-
-            condicion = new Predicate<Idioma>(objeto => objeto.Codigo == strCodigo);
-
-            return new();
+            return this.GetDAOIdiomas().CargarIdioma(iIdiomaId);
         }
 
-        //internal Idiomas CargarIdiomas()
-        //{
-        //    lock (_objetoDeBloqueo)
-        //    {
-        //        if (!MemoryCache.Default.Contains("Idiomas"))
-        //        {
-        //            MemoryCache.Default.Add("Idiomas", this.GetDAOIdiomas().CargarIdiomas(), new CacheItemPolicy { SlidingExpiration = TimeSpan.FromHours(1) });
-        //        }
-        //    }
-        //    return (Idiomas)MemoryCache.Default["Idiomas"];
-        //}
+        internal Idioma? CargarIdioma(string strCodigo)
+        {
+            return this.GetDAOIdiomas().CargarIdiomaPorLogin(strCodigo);
+        }
 
         #endregion
 

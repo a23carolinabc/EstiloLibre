@@ -49,6 +49,7 @@ namespace EstiloLibre_CapaNegocio.Servicios
             Usuario? usuario;
             CDUsuarioDatosIniciales modelo;
             UsuarioAutenticadoDTO usuarioDTO;
+            Idioma? idioma;
 
             //Consultar la base de datos por login indicado.
             usuario = this._consultasUsuarios.GetUsuarioPorLogin(credenciales.NombreDeUsuario);
@@ -75,6 +76,12 @@ namespace EstiloLibre_CapaNegocio.Servicios
             modelo = new CDUsuarioDatosIniciales(this._con);
             modelo.Cargar(usuario.Id);
             usuario = modelo.Usuario;
+            idioma = this._con.CargarIdioma(usuario.IdiomaId);
+            if (idioma == null)
+            {
+                idioma = this._con.CargarIdioma(CodigosIdiomas.Español);
+            }
+
             usuarioDTO = new UsuarioAutenticadoDTO()
             {
                 Id = usuario.Id,
@@ -83,7 +90,9 @@ namespace EstiloLibre_CapaNegocio.Servicios
                 Login = usuario.Login,
                 FechaBaja = usuario.FechaBaja,
                 Permisos = usuario.Permisos,
-                CorreoE = usuario.CorreoE
+                CorreoE = usuario.CorreoE,
+                IdiomaActualId = usuario.IdiomaId,
+                CodigoIdiomaActual = idioma!.Codigo
             };
 
             return new ResultadoAutentificacion(usuarioDTO);

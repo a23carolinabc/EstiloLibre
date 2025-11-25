@@ -12,6 +12,7 @@ namespace EstiloLibre_CapaNegocio.Objetos
         
         public string Login { get; set; }
         public string Contraseña { get; set; }
+        public int IdiomaId { get; set; }
         public string Nombre { get; set; }
         public string Apellido1 { get; set; }
         public string? Apellido2 { get; set; }

@@ -17,7 +17,7 @@ namespace EstiloLibre_CapaNegocio.Base
         protected bool ExisteEnBD { get; set; }
 
         [Key]
-        internal int Id
+        public int Id
         {
             get { return _id; }
             set { _id = value; if (value > 0) ExisteEnBD = true; }

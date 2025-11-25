@@ -54,8 +54,8 @@ namespace EstiloLibre.Filtros
                 Apellidos = datosUsuarioAutenticado.Apellidos,
                 Login = datosUsuarioAutenticado.Login,
                 Permisos = new List<string>(datosUsuarioAutenticado.ListaPermisosAcceso),
-                //IdiomaActualId = datosUsuarioAutenticado.IdiomaId,
-                //CodigoIdiomaActual = datosUsuarioAutenticado.CodigoIdiomaActual
+                IdiomaActualId = datosUsuarioAutenticado.IdiomaId,
+                CodigoIdiomaActual = datosUsuarioAutenticado.CodigoIdiomaActual
             };
 
             //Establecer el usuario en el objeto conexión.

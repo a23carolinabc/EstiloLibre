@@ -65,7 +65,7 @@ namespace EstiloLibre_CapaNegocio.Comandos
                 usuario.Apellido1 = comando.UsuarioSaveData.Usuario.Apellido1;
                 usuario.Apellido2 = comando.UsuarioSaveData.Usuario.Apellido2;
                 usuario.CorreoE = comando.UsuarioSaveData.Usuario.CorreoE;
-                //usuario.IdiomaId = comando.UsuarioSaveData.Usuario.IdiomaId;
+                usuario.IdiomaId = comando.UsuarioSaveData.Usuario.IdiomaId;
                 usuario.Publico = true;
                 if (!comando.UsuarioSaveData.Usuario.Activo)
                 {
