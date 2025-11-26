@@ -117,26 +117,6 @@ namespace EstiloLibre_CapaNegocio.AccesoBD
 
         }
 
-        public DatosSesionDTO GetDatosDeSesion(int iUsuarioId)
-        {
-            DatosSesionDTO datosDeSesion;
-            Usuario? usuario;
-
-            usuario = this.CargarUsuario(iUsuarioId);
-            if (usuario == null)
-            {
-                throw new ReglaNegocioException("Usuarios_RN_001", iUsuarioId);
-            }
-
-            datosDeSesion = new DatosSesionDTO()
-            {
-                CodigoIdioma = "1"
-                //CodigoIdioma = this.CargarIdioma(usuario.IdiomaId.ToString()).Codigo
-            };
-
-            return datosDeSesion;
-        }
-
         public DatosSesionDTO GetDatosDeSesion(UsuarioAutenticadoDTO usuario)
         {
             DatosSesionDTO datosDeSesion;

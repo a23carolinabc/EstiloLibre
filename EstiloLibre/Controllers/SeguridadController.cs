@@ -70,47 +70,11 @@ namespace EstiloLibre.Controllers
             strToken = this._servicioIdentidad.GenerarToken(resultadoAutenticacion.UsuarioAutenticado, bElUsuarioEsPersona: true);
 
             //Cargar los datos de sesión.
-            datosDeSesion = this._con.GetDatosDeSesion(resultadoAutenticacion.UsuarioAutenticado.Id);
-
-            //Devolver respuesta.
-            return Ok(new { Token = strToken, DatosDeSesion = datosDeSesion });
-        }
-
-        [Route("autenticarPrueba")]
-        [HttpGet]
-        [ProducesResponseType(typeof(string), (int)HttpStatusCode.OK)]
-        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
-        public IActionResult AutentificarPrueba()
-        {
-            string strToken;
-            CredencialesUsuario credenciales;
-            ResultadoAutentificacion resultadoAutenticacion;
-            DatosSesionDTO datosDeSesion;
-
-            credenciales = new CredencialesUsuario()
-            {
-                Login = "admin",
-                Contraseña = "f2e53c927c66fe711e8e88ef9b37a8e3187f1652216b313fc8eb2513883dd360"
-            };
-
-            //Comprobar credenciales de acceso en capa negocio.
-            resultadoAutenticacion = this._servicioIdentidad.AutentificarUsuarioEnCapaNegocio(credenciales);
-
-            //Si el usuario no existe en la BD o este está deshabilitado, devolver un error.
-            if (!resultadoAutenticacion.Correcto)
-            {
-                return Unauthorized("");
-            }
-            //Construir el token si las credenciales son correctas.
-            strToken = this._servicioIdentidad.GenerarToken(resultadoAutenticacion.UsuarioAutenticado, bElUsuarioEsPersona: true);
-
-            //Cargar los datos de sesión.
             datosDeSesion = this._con.GetDatosDeSesion(resultadoAutenticacion.UsuarioAutenticado);
 
             //Devolver respuesta.
             return Ok(new { Token = strToken, DatosDeSesion = datosDeSesion });
-        }
+        }        
 
         [Route("getDatosSesion")]
         [HttpGet]
@@ -122,7 +86,7 @@ namespace EstiloLibre.Controllers
             DatosSesionDTO datosDeSesion;
 
             //Cargar los datos de sesión.
-            datosDeSesion = this._con.GetDatosDeSesion(this._con.UsuarioAutenticado.Id);
+            datosDeSesion = this._con.GetDatosDeSesion(this._con.UsuarioAutenticado);
 
             //Devolver el resultado de la ejecución.
             return Ok(datosDeSesion);
