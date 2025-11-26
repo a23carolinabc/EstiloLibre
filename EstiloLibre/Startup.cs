@@ -68,7 +68,7 @@ namespace EstiloLibre
             //SignalR
             app.UseResponseCompression();
             
-            if (!env.IsDevelopment())
+            if (!env.IsDevelopment() && env.EnvironmentName != "Docker")
             {
                 var secondaryProvider = new PhysicalFileProvider(Path.Combine(env.ContentRootPath, "AplicacionCliente"));
                 env.WebRootFileProvider = new CompositeFileProvider(env.WebRootFileProvider, secondaryProvider);
