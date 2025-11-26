@@ -52,7 +52,7 @@ namespace EstiloLibre
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (env.IsDevelopment())
+            if (env.IsDevelopment() || env.EnvironmentName == "Docker")
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
@@ -63,7 +63,10 @@ namespace EstiloLibre
                 app.UseHsts();
             }
 
-            app.UseHttpsRedirection();
+            if (env.EnvironmentName != "Docker")
+            {
+                app.UseHttpsRedirection();
+            }
 
             //SignalR
             app.UseResponseCompression();
@@ -84,7 +87,7 @@ namespace EstiloLibre
             //NOTA: Esto debe estar entre UseRouting y UseEndpoints.
             this.UsarAutenticacion(app);
 
-            if (env.IsDevelopment())
+            if (env.IsDevelopment() || env.EnvironmentName == "Docker")
             {
                 app.UseCors("ClienteBlazorCORS");
             }
@@ -188,7 +191,7 @@ namespace EstiloLibre
 
         public static IServiceCollection ConfigurarPolicitaCORS(this IServiceCollection servicios, IConfiguration configuration, IWebHostEnvironment entornoActual)
         {
-            if (entornoActual.IsDevelopment())
+            if (entornoActual.IsDevelopment() || entornoActual.EnvironmentName == "Docker")
             {
                 servicios.AddCors(opciones =>
                 {
