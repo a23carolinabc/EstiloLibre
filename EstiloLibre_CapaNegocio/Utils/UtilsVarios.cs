@@ -1,9 +1,11 @@
-﻿using System.Security.Cryptography;
+﻿using Dapper;
+using System.Data;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace EstiloLibre_CapaNegocio.Utils
 {
-    public class UtilsVarios
+    public static class UtilsVarios
     {
         internal static string GenerarHash(string strTexto)
         {
@@ -20,6 +22,25 @@ namespace EstiloLibre_CapaNegocio.Utils
 
             //Devolver el hash en formato hexadecimal.
             return strHash;
+        }
+
+        public static IEnumerable<T> MapearALista<T>(this DataTable tabla) where T : class
+        {
+            if (tabla == null || tabla.Rows.Count == 0)
+            {
+                return Enumerable.Empty<T>();
+            }
+
+            using (var reader = tabla.CreateDataReader())
+            {
+                var resultado = SqlMapper.Parse<T>(reader).ToList();
+                return resultado;
+            }
+        }
+
+        public static T? MapearAObjeto<T>(this DataTable tabla) where T : class
+        {
+            return tabla.MapearALista<T>().FirstOrDefault();
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿using EstiloLibre_CapaNegocio.Excepciones;
+﻿using EstiloLibre_CapaNegocio.Base;
+using EstiloLibre_CapaNegocio.Excepciones;
+using EstiloLibre_CapaNegocio.Utils;
 using MySqlConnector;
 using System.Data;
 using System.Data.Common;
@@ -164,6 +166,35 @@ namespace EstiloLibre_CapaNegocio.AccesoBD
             }
 
             return this._datos.Tables[nombreTabla];
+        }
+
+        protected T? MapearObjeto<T>(string nombreTabla) where T : class
+        {
+            DataTable? tabla;
+
+            if (!this.TablaTieneDatos(nombreTabla))
+            {
+                return null;
+            }
+
+            tabla = this.GetTabla(nombreTabla);
+            return tabla!.MapearAObjeto<T>();
+        }
+
+        protected ListaObjetosBD<T> MapearLista<T>(string nombreTabla) where T : ObjetoBD, new()
+        {
+            DataTable? tabla;
+            IEnumerable<T> lista;
+
+            if (!this.TablaTieneDatos(nombreTabla))
+            {
+                return new ListaObjetosBD<T>();
+            }
+
+            tabla = this.GetTabla(nombreTabla);
+            lista = tabla!.MapearALista<T>();
+
+            return new ListaObjetosBD<T>(lista);
         }
         #endregion
     }
