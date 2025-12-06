@@ -149,6 +149,7 @@ namespace EstiloLibre
                 configCapaNegocio = configuracion.GetSection("CapaNegocio");
                 datosConfiguracion = new DatosConfiguracion()
                 {
+                    RutaGestorArchivos = configCapaNegocio["RutaGestorArchivos"]!,
                     CadenaDeConexion = configCapaNegocio["CadenaDeConexion"]!,
                     TimeOutConsultasSql = int.Parse(configCapaNegocio["TimeOutComandosConsultasEnSeg"]!),
                 };

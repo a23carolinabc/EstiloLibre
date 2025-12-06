@@ -76,13 +76,13 @@ namespace EstiloLibre_CapaNegocio.ContenedoresDatos
             datos = this.EjecutarConsulta();
 
             // Mapear colecciones automáticamente
-            this.Estaciones = (Estaciones)this.MapearLista<Estacion>(TablasBD.Estaciones);
-            this.Marcas = (Marcas)this.MapearLista<Marca>(TablasBD.Marcas);
-            this.Materiales = (Materiales)this.MapearLista<Material>(TablasBD.Materiales);
-            this.Tallas = (Tallas)this.MapearLista<Talla>(TablasBD.Tallas);
-            this.Categorias = (Categorias)this.MapearLista<Categoria>(TablasBD.Categorias);
-            this.Colores = (Colores)this.MapearLista<Color>(TablasBD.Colores);
-            this.Estados = (Estados)this.MapearLista<Estado>(TablasBD.Estados);
+            this.Estaciones = new Estaciones(this.MapearLista<Estacion>(TablasBD.Estaciones));
+            this.Marcas = new Marcas(this.MapearLista<Marca>(TablasBD.Marcas));
+            this.Materiales = new Materiales(this.MapearLista<Material>(TablasBD.Materiales));
+            this.Tallas = new Tallas(this.MapearLista<Talla>(TablasBD.Tallas));
+            this.Categorias = new Categorias(this.MapearLista<Categoria>(TablasBD.Categorias));
+            this.Colores = new Colores(this.MapearLista<Color>(TablasBD.Colores));
+            this.Estados = new Estados(this.MapearLista<Estado>(TablasBD.Estados));
         }
 
         #endregion

@@ -22,6 +22,7 @@
         {
             this.CadenaDeConexion = datosConfiguracion.CadenaDeConexion;
             this.TimeOutConsultasSql = datosConfiguracion.TimeOutConsultasSql;
+            this.RutaGestorArchivos = datosConfiguracion.RutaGestorArchivos;
         }
 
         #endregion

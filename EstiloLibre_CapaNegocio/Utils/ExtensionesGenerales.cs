@@ -24,12 +24,14 @@ namespace EstiloLibre_CapaNegocio.Utils
         {
             //Registrar servicios.
             services.AddScoped<ServicioCombos>();
+            services.AddScoped<ServicioAlmacenamientoImagenes>();
         }
 
         private static void AddConsultas(this IServiceCollection services)
         {
             //Registrar consultas.
             services.AddScoped<ConsultasUsuarios>();
+            services.AddScoped<ConsultasPrendas>();
         }
         #endregion
     }
