@@ -21,7 +21,6 @@ namespace EstiloLibre_CapaNegocio.Objetos
         public decimal? Precio { get; set; }
         public string? EnlaceCompra { get; set; }
         public DateTime? FechaCompra { get; set; }
-        public string RutaFoto { get; set; }
         
         #endregion
 

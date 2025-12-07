@@ -7,7 +7,7 @@ namespace EstiloLibre_CapaNegocio.Utils
 {
     public static class UtilsVarios
     {
-        internal static string GenerarGUID()
+        internal static string GenerarGuid()
         {
             return Guid.NewGuid().ToString();
         }

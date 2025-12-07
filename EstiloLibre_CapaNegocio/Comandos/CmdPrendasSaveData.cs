@@ -1,8 +1,10 @@
 ﻿using EstiloLibre_CapaNegocio.AccesoBD;
 using EstiloLibre_CapaNegocio.Base;
+using EstiloLibre_CapaNegocio.Colecciones;
 using EstiloLibre_CapaNegocio.Excepciones;
 using EstiloLibre_CapaNegocio.Objetos;
 using EstiloLibre_CapaNegocio.Servicios;
+using EstiloLibre_CapaNegocio.Utils;
 using MediatR;
 using static EstiloLibre_CapaNegocio.Comandos.CmdPrendasSaveData.Dtos;
 
@@ -12,7 +14,7 @@ namespace EstiloLibre_CapaNegocio.Comandos
         : ComandoBase, IRequest<int>
     {
         public PrendaSaveDataDTO Prenda { get; set; }
-        public CmdPrendasSaveData(PrendaSaveDataDTO prendaSaveData) : base([AccesoBD.Codigos.Permisos.MOD_Prendas])
+        public CmdPrendasSaveData(PrendaSaveDataDTO prendaSaveData) : base([Codigos.Permisos.USER])
         {
             this.Prenda = prendaSaveData;
         }
@@ -22,7 +24,7 @@ namespace EstiloLibre_CapaNegocio.Comandos
     {
         #region ***** PROPIEDADES *****
 
-        private readonly ServicioAlmacenamientoImagenes _servicioAlmacenamiento;
+        private readonly ServicioAlmacenamiento _servicioAlmacenamiento;
 
         #endregion
 
@@ -30,7 +32,7 @@ namespace EstiloLibre_CapaNegocio.Comandos
 
         public PcmdPrendasSaveData(Conexion con) : base(con)
         {
-            this._servicioAlmacenamiento = new ServicioAlmacenamientoImagenes(con.ConfiguracionEstiloLibre);
+            this._servicioAlmacenamiento = new ServicioAlmacenamiento(con.ConfiguracionEstiloLibre);
         }
 
         #endregion
@@ -40,8 +42,11 @@ namespace EstiloLibre_CapaNegocio.Comandos
         public async Task<int> Handle(CmdPrendasSaveData comando, CancellationToken cancellationToken)
         {
             Prenda? prenda;
-            string nombreArchivoImagen;
+            Adjunto adjunto;
+            byte[] byImagen;
+            bool bEsActualizacion;
 
+            bEsActualizacion = false;
             base.VericarPermisos(comando);
 
             try
@@ -57,6 +62,7 @@ namespace EstiloLibre_CapaNegocio.Comandos
                     {
                         throw new ReglaNegocioParaUsuarioException("ERR_ObjetoNoEncontrado");
                     }
+                    bEsActualizacion = true;
                 }
                 else
                 {
@@ -74,7 +80,6 @@ namespace EstiloLibre_CapaNegocio.Comandos
                 prenda.Precio = comando.Prenda.Precio;
                 prenda.EnlaceCompra = comando.Prenda.EnlaceCompra;
                 prenda.FechaCompra = comando.Prenda.FechaCompra;
-                prenda.RutaFoto = string.Empty;
 
                 //Asignamos el id del usuario autenticado.
                 prenda.UsuarioId = this.con.UsuarioAutenticado.Id;
@@ -82,15 +87,38 @@ namespace EstiloLibre_CapaNegocio.Comandos
                 //Guardar prenda para obtener id.
                 prenda.Guardar();
 
-                // Guardar imagen en sistema de archivos.
-                nombreArchivoImagen = await this._servicioAlmacenamiento.GuardarImagenPrenda(
-                    comando.Prenda.FotoBase64,
-                    prenda.Id
-                );
+                if (!string.IsNullOrEmpty(comando.Prenda.FotoBase64))
+                {
+                    if (bEsActualizacion)
+                    {
+                        Adjuntos adjuntosAntiguos = con.CargarAdjuntos(Codigos.ClasesObjetos.Prenda, prenda.Id);
 
-                //Actualizar ruta de la foto.
-                prenda.RutaFoto = nombreArchivoImagen;
-                prenda.Guardar();
+                        foreach (Adjunto adjuntoAntiguo in adjuntosAntiguos)
+                        {
+                            // Eliminar archivo físico
+                            this._servicioAlmacenamiento.EliminarArchivo(adjuntoAntiguo);
+
+                            // Eliminar registro de BD
+                            adjuntoAntiguo.Eliminar();
+                        }
+                    }
+
+                    // Procesar imagen (redimensionar, convertir a WebP)
+                    byImagen = await this._servicioAlmacenamiento.ProcesarImagen(comando.Prenda.FotoBase64);
+
+                    // Crear nuevo adjunto en BD
+                    adjunto = con.CrearAdjunto();
+                    adjunto.ClaseObjetoId = Codigos.ClasesObjetos.Prenda;
+                    adjunto.ObjetoId = prenda.Id;
+                    adjunto.TipoAdjuntoId = Codigos.TiposAdjuntos.Imagen;
+                    adjunto.Guid = UtilsVarios.GenerarGuid();
+
+                    // Guardar adjunto.
+                    adjunto.Guardar();
+
+                    // Guardar archivo físico comprimido
+                    await this._servicioAlmacenamiento.GuardarArchivo(adjunto, byImagen);
+                }
 
                 // Confirmar transacción.
                 con.CommitTrans();

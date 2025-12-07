@@ -14,12 +14,14 @@
             public const string MOD_Usuarios = "MOD_Usuarios";
             public const string LEC_Prendas = "LEC_Prendas";
             public const string MOD_Prendas = "MOD_Prendas";
+            public const string ADMIN = "ADMIN";
+            public const string USER = "USER";
         }
 
         internal class ClasesObjetos
         {
-            public const int Prendas = 1;
-            public const int Conjuntos = 2;
+            public const int Prenda = 1;
+            public const int Conjunto = 2;
         }
 
         internal class TiposAdjuntos

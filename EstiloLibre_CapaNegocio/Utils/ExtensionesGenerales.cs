@@ -24,7 +24,7 @@ namespace EstiloLibre_CapaNegocio.Utils
         {
             //Registrar servicios.
             services.AddScoped<ServicioCombos>();
-            services.AddScoped<ServicioAlmacenamientoImagenes>();
+            services.AddScoped<ServicioAlmacenamiento>();
         }
 
         private static void AddConsultas(this IServiceCollection services)

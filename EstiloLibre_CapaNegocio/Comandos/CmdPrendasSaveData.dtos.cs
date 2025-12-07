@@ -12,8 +12,7 @@ namespace EstiloLibre_CapaNegocio.Comandos
         {
             public class PrendaSaveDataDTO
             {
-                public int Id { get; set; }
-                public string RutaFoto { get; set; }                                
+                public int Id { get; set; }                              
                 public int ColorId { get; set; }
                 public int CategoriaId { get; set; }
                 public int EstadoId { get; set; }

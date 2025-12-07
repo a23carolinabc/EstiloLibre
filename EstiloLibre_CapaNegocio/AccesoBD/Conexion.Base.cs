@@ -77,9 +77,9 @@ namespace EstiloLibre_CapaNegocio.AccesoBD
             return this.GetDAOAdjuntos().CargarAdjunto(iAdjuntoId);
         }
 
-        public Adjunto? CargarAdjunto(string strAdjunto)
+        public Adjuntos CargarAdjuntos(int iClaseObjetoId, int iObjetoId)
         {
-            return this.GetDAOAdjuntos().CargarAdjunto(strAdjunto);
+            return this.GetDAOAdjuntos().CargarAdjuntos(iClaseObjetoId, iObjetoId);
         }
         #endregion
     }

@@ -1,6 +1,9 @@
 ﻿using EstiloLibre_CapaNegocio.AccesoBD;
 using EstiloLibre_CapaNegocio.Base;
+using EstiloLibre_CapaNegocio.Colecciones;
+using EstiloLibre_CapaNegocio.Excepciones;
 using EstiloLibre_CapaNegocio.Objetos;
+using System.Data;
 
 namespace EstiloLibre_CapaNegocio.DAOs
 {
@@ -20,9 +23,13 @@ namespace EstiloLibre_CapaNegocio.DAOs
         {
             return (Adjunto?)this.CargarObjetoBD(iAdjuntoId);
         }
-        public Adjunto? CargarAdjunto(string strGuid)
+        public Adjuntos CargarAdjuntos(int iClaseObjetoId, int iObjetoId)
         {
-            return (Adjunto?)this.CargarObjetoBD($"Guid = '{strGuid}'");
+            Adjuntos adjuntos;
+                       
+            adjuntos = new(this.CargarObjetosBD($"ClaseObjetoId = {iClaseObjetoId} AND ObjetoId = {iObjetoId}"));
+
+            return adjuntos;
         }
         #endregion
     }    

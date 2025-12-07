@@ -2,6 +2,7 @@
 {
     public static class TablasBD
     {
+        public const string Adjuntos = "Adjuntos";         
         public const string Usuarios = "Usuarios";         
         public const string Idiomas = "Idiomas";         
         public const string Articulos = "Articulos";         

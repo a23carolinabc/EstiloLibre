@@ -7,11 +7,10 @@ namespace EstiloLibre_CapaNegocio.Objetos
     {
         #region ***** PROPIEDADES *****
 
-        public string Guid { get; set; }
+        public string Guid { get; set;}
         public int ClaseObjetoId { get; set; }
         public int ObjetoId { get; set; }
         public int TipoAdjuntoId { get; set; }
-        public string Nombre { get; set; }
 
         #endregion
 
