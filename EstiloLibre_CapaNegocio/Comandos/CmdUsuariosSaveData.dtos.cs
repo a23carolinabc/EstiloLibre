@@ -4,7 +4,7 @@
     {
         public class Dtos
         {
-            public class UsuarioSaveData
+            public class UsuarioSaveDataDTO
             {
                 public UsuarioDTO Usuario { get; set; }
                 public IEnumerable<int> LstPermisosAsignadosIds { get; set; }

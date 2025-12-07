@@ -1,5 +1,4 @@
-﻿using EstiloLibre_CapaNegocio.Configuracion;
-using EstiloLibre_CapaNegocio.Excepciones;
+﻿using EstiloLibre_CapaNegocio.Excepciones;
 using EstiloLibre_CapaNegocio.Objetos;
 using EstiloLibre_CapaNegocio.ObjetosDTO.Seguridad;
 

@@ -59,5 +59,28 @@ namespace EstiloLibre_CapaNegocio.AccesoBD
         }
 
         #endregion
+
+        #region Adjuntos
+
+        public AdjuntosDAO GetDAOAdjuntos()
+        {
+            return new AdjuntosDAO(this);
+        }
+
+        public Adjunto CrearAdjunto()
+        {
+            return (Adjunto)this.GetDAOAdjuntos().CrearObjetoBD();
+        }
+
+        public Adjunto? CargarAdjunto(int iAdjuntoId)
+        {
+            return this.GetDAOAdjuntos().CargarAdjunto(iAdjuntoId);
+        }
+
+        public Adjunto? CargarAdjunto(string strAdjunto)
+        {
+            return this.GetDAOAdjuntos().CargarAdjunto(strAdjunto);
+        }
+        #endregion
     }
 }

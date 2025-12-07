@@ -1,6 +1,7 @@
 ﻿using Dapper.Contrib.Extensions;
 using EstiloLibre_CapaNegocio.AccesoBD;
 using EstiloLibre_CapaNegocio.Base;
+using EstiloLibre_CapaNegocio.DAOs;
 using System.Data;
 
 namespace EstiloLibre_CapaNegocio.Objetos
@@ -29,7 +30,7 @@ namespace EstiloLibre_CapaNegocio.Objetos
 
         public Usuario() : base() { }
 
-        public Usuario(DAO<Usuario> dao) : base(dao) { }        
+        public Usuario(UsuariosDAO dao) : base(dao) { }        
         
         #endregion
 

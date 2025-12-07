@@ -6,6 +6,8 @@ using EstiloLibre_CapaNegocio.Comandos;
 using EstiloLibre_CapaNegocio.Consultas;
 using EstiloLibre_CapaNegocio.ObjetosDTO.Seguridad;
 using System.Net;
+using static EstiloLibre_CapaNegocio.Comandos.CmdUsuariosDelete;
+using static EstiloLibre_CapaNegocio.Comandos.CmdUsuariosSaveData.Dtos;
 
 namespace EstiloLibre.Controllers;
 
@@ -92,7 +94,7 @@ public class UsuariosController
     [ProducesResponseType(typeof(int), (int)HttpStatusCode.OK)]
     [ProducesResponseType((int)HttpStatusCode.BadRequest)]
     [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
-    public async Task<IActionResult> SaveData([FromBody] CmdUsuariosSaveData.Dtos.UsuarioSaveData Usuario)
+    public async Task<IActionResult> SaveData([FromBody] UsuarioSaveDataDTO Usuario)
     {
         CmdUsuariosSaveData comando;
         int resultado;

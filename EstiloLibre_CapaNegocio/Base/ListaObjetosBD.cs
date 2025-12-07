@@ -14,11 +14,11 @@
         {
         }
 
-        public ListaObjetosBD(IEnumerable<T> lstLista)             
+        public ListaObjetosBD(IEnumerable<T> lstLista) : base(lstLista)
         {
         }
 
-        public ListaObjetosBD(int iCapacidadInicial)             
+        public ListaObjetosBD(int iCapacidadInicial) : base(iCapacidadInicial)
         {
             this._iCapacidadInicial = iCapacidadInicial;
         }             

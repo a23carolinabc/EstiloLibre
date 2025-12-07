@@ -70,10 +70,8 @@ namespace EstiloLibre_CapaNegocio.ContenedoresDatos
 
         public override void Cargar()
         {
-            DataSet datos;
-
             // Ejecutar consulta
-            datos = this.EjecutarConsulta();
+            this.EjecutarConsulta();
 
             // Mapear colecciones automáticamente
             this.Estaciones = new Estaciones(this.MapearLista<Estacion>(TablasBD.Estaciones));

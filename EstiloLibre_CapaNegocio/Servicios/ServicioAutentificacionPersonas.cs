@@ -1,5 +1,4 @@
 ﻿using EstiloLibre_CapaNegocio.AccesoBD;
-using EstiloLibre_CapaNegocio.Base;
 using EstiloLibre_CapaNegocio.Consultas;
 using EstiloLibre_CapaNegocio.ContenedoresDatos;
 using EstiloLibre_CapaNegocio.Objetos;
@@ -79,7 +78,7 @@ namespace EstiloLibre_CapaNegocio.Servicios
             idioma = this._con.CargarIdioma(usuario.IdiomaId);
             if (idioma == null)
             {
-                idioma = this._con.CargarIdioma(CodigosIdiomas.Español);
+                idioma = this._con.CargarIdioma(Codigos.Idiomas.Español);
             }
 
             usuarioDTO = new UsuarioAutenticadoDTO()

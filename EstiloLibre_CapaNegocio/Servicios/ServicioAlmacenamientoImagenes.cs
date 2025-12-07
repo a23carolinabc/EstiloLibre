@@ -2,15 +2,9 @@
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats.Webp;
 using SixLabors.ImageSharp.Processing;
-using System;
-using System.IO;
-using System.Threading.Tasks;
 
 namespace EstiloLibre_CapaNegocio.Servicios
 {
-    /// <summary>
-    /// Servicio para almacenar y gestionar imágenes de prendas
-    /// </summary>
     public class ServicioAlmacenamientoImagenes
     {
         #region ***** PROPIEDADES *****
@@ -21,18 +15,14 @@ namespace EstiloLibre_CapaNegocio.Servicios
 
         #region ***** CONSTRUCTORES *****
 
-        /// <summary>
-        /// Constructor del servicio
-        /// </summary>
-        /// <param name="configuracion">Configuración de la aplicación</param>
-        public ServicioAlmacenamientoImagenes(EstiloLibre_CapaNegocio.Configuracion.Configuracion configuracion)
+        public ServicioAlmacenamientoImagenes(Configuracion.Configuracion configuracion)
         {
             string rutaConfiguracion;
 
             // Leer ruta desde configuración
             rutaConfiguracion = configuracion.RutaGestorArchivos;
 
-            // Si no existe en configuración, usar ruta por defecto
+            // Si no existe en configuración
             if (string.IsNullOrEmpty(rutaConfiguracion) || !Directory.Exists(this._rutaBaseImagenes))
             {
                 throw new CapaNegocioException("Ruta gestor de archivos no encontrada");
@@ -43,12 +33,6 @@ namespace EstiloLibre_CapaNegocio.Servicios
 
         #region ***** MÉTODOS PÚBLICOS *****
 
-        /// <summary>
-        /// Guarda una imagen de prenda procesándola y comprimiéndola
-        /// </summary>
-        /// <param name="imagenBase64">Imagen en formato Base64 (sin fondo)</param>
-        /// <param name="prendaId">ID de la prenda</param>
-        /// <returns>Nombre del archivo guardado</returns>
         public async Task<string> GuardarImagenPrenda(string imagenBase64, int prendaId)
         {
             byte[] imagenBytes;

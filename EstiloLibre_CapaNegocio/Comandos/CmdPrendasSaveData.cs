@@ -1,37 +1,23 @@
-﻿using MediatR;
-using EstiloLibre_CapaNegocio.AccesoBD;
+﻿using EstiloLibre_CapaNegocio.AccesoBD;
 using EstiloLibre_CapaNegocio.Base;
+using EstiloLibre_CapaNegocio.Excepciones;
 using EstiloLibre_CapaNegocio.Objetos;
 using EstiloLibre_CapaNegocio.Servicios;
+using MediatR;
+using static EstiloLibre_CapaNegocio.Comandos.CmdPrendasSaveData.Dtos;
 
 namespace EstiloLibre_CapaNegocio.Comandos
 {
-    /// <summary>
-    /// Comando para guardar una prenda
-    /// </summary>
-    public class CmdPrendasSaveData : ComandoBase, IRequest<int>
+    public partial class CmdPrendasSaveData
+        : ComandoBase, IRequest<int>
     {
-        public string FotoBase64 { get; set; }
-        public int UsuarioId { get; set; }
-        public int ColorId { get; set; }
-        public int CategoriaId { get; set; }
-        public int EstadoId { get; set; }
-        public int TallaId { get; set; }
-        public int MaterialId { get; set; }
-        public int MarcaId { get; set; }
-        public int EstacionId { get; set; }
-        public decimal Precio { get; set; }
-        public string EnlaceCompra { get; set; }
-        public DateTime? FechaCompra { get; set; }
-
-        public CmdPrendasSaveData() : base([])
+        public PrendaSaveDataDTO Prenda { get; set; }
+        public CmdPrendasSaveData(PrendaSaveDataDTO prendaSaveData) : base([AccesoBD.Codigos.Permisos.MOD_Prendas])
         {
+            this.Prenda = prendaSaveData;
         }
     }
 
-    /// <summary>
-    /// Procesador del comando de guardar prenda
-    /// </summary>
     public class PcmdPrendasSaveData : ProcesadorDeComandoBase, IRequestHandler<CmdPrendasSaveData, int>
     {
         #region ***** PROPIEDADES *****
@@ -53,53 +39,67 @@ namespace EstiloLibre_CapaNegocio.Comandos
 
         public async Task<int> Handle(CmdPrendasSaveData comando, CancellationToken cancellationToken)
         {
-            Prenda prenda;
+            Prenda? prenda;
             string nombreArchivoImagen;
+
+            base.VericarPermisos(comando);
 
             try
             {
-                // Iniciar transacción
+                //Envolver todo el proceso en una transacción.
                 con.BeginTrans();
 
-                // 1. CREAR OBJETO PRENDA
-                prenda = new Prenda()
+                //Buscar si el objeto ya estaba registrado en BD.
+                if (comando.Prenda.Id > 0)
                 {
-                    UsuarioId = comando.UsuarioId,
-                    ColorId = comando.ColorId,
-                    CategoriaId = comando.CategoriaId,
-                    EstadoId = comando.EstadoId,
-                    TallaId = comando.TallaId,
-                    MaterialId = comando.MaterialId,
-                    MarcaId = comando.MarcaId = comando.MarcaId,
-                    EstacionId = comando.EstacionId = comando.EstacionId,
-                    Precio = comando.Precio,
-                    EnlaceCompra = comando.EnlaceCompra,
-                    FechaCompra = comando.FechaCompra,
-                    RutaFoto = string.Empty // Temporal, se actualiza después
-                };
+                    prenda = con.CargarPrenda(comando.Prenda.Id);
+                    if (prenda == null)
+                    {
+                        throw new ReglaNegocioParaUsuarioException("ERR_ObjetoNoEncontrado");
+                    }
+                }
+                else
+                {
+                    prenda = con.CrearPrenda();
+                }
 
-                // 2. GUARDAR PRENDA EN BD (para obtener el ID)
+                //Transferir propiedades del DTO al objeto de BD.
+                prenda.ColorId = comando.Prenda.ColorId;
+                prenda.CategoriaId = comando.Prenda.CategoriaId;
+                prenda.EstadoId = comando.Prenda.EstadoId;
+                prenda.TallaId = comando.Prenda.TallaId;
+                prenda.MaterialId = comando.Prenda.MaterialId;
+                prenda.MarcaId = comando.Prenda.MarcaId;
+                prenda.EstacionId = comando.Prenda.EstacionId;
+                prenda.Precio = comando.Prenda.Precio;
+                prenda.EnlaceCompra = comando.Prenda.EnlaceCompra;
+                prenda.FechaCompra = comando.Prenda.FechaCompra;
+                prenda.RutaFoto = string.Empty;
+
+                //Asignamos el id del usuario autenticado.
+                prenda.UsuarioId = this.con.UsuarioAutenticado.Id;
+
+                //Guardar prenda para obtener id.
                 prenda.Guardar();
 
-                // 3. GUARDAR IMAGEN EN SISTEMA DE ARCHIVOS
+                // Guardar imagen en sistema de archivos.
                 nombreArchivoImagen = await this._servicioAlmacenamiento.GuardarImagenPrenda(
-                    comando.FotoBase64,
+                    comando.Prenda.FotoBase64,
                     prenda.Id
                 );
 
-                // 4. ACTUALIZAR RUTA DE IMAGEN EN BD
+                //Actualizar ruta de la foto.
                 prenda.RutaFoto = nombreArchivoImagen;
                 prenda.Guardar();
 
-                // Confirmar transacción
+                // Confirmar transacción.
                 con.CommitTrans();
 
-                // Devolver ID de la prenda creada
+                // Devolver id del objeto.
                 return prenda.Id;
             }
             catch
             {
-                // Revertir transacción en caso de error
                 con.RollBackTrans();
                 throw;
             }

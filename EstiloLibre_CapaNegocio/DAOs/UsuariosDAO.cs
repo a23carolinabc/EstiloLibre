@@ -17,13 +17,13 @@ namespace EstiloLibre_CapaNegocio.DAOs
         {
             return new Usuario(this);
         }
-        public Usuario? CargarUsuario(int usuarioId)
+        public Usuario? CargarUsuario(int iUsuarioId)
         {
-            return (Usuario?)this.CargarObjetoBD(usuarioId);
+            return (Usuario?)this.CargarObjetoBD(iUsuarioId);
         }
-        public Usuario? CargarUsuarioPorLogin(string login)
+        public Usuario? CargarUsuarioPorLogin(string strLogin)
         {
-            return (Usuario?)this.CargarObjetoBD($"Login = '{login}'");
+            return (Usuario?)this.CargarObjetoBD($"Login = '{strLogin}'");
         }
         #endregion
     }    

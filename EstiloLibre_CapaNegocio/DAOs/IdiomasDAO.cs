@@ -4,13 +4,10 @@ using EstiloLibre_CapaNegocio.Objetos;
 
 namespace EstiloLibre_CapaNegocio.DAOs;
 
-internal class IdiomasDAO : DAO<Idioma>
+public class IdiomasDAO : DAO<Idioma>
 {
     #region ***** CONSTRUCTORES *****    
-    public IdiomasDAO(Conexion conexion)
-        :base(conexion, TablasBD.Idiomas) 
-    { 
-    }
+    public IdiomasDAO(Conexion conexion) :base(conexion, TablasBD.Idiomas) { }
 
     #endregion
 

@@ -15,7 +15,7 @@ namespace EstiloLibre_CapaNegocio.AccesoBD
         private string _consultaSql;
         private string[] _nombresTablas;
         private List<ParametroBD> _parametros;
-        private DataSet _datos;
+        protected DataSet _datos;
 
         #endregion
 
@@ -172,12 +172,12 @@ namespace EstiloLibre_CapaNegocio.AccesoBD
         {
             DataTable? tabla;
 
-            if (!this.TablaTieneDatos(nombreTabla))
+            tabla = this.GetTabla(nombreTabla);
+            if(tabla == null)
             {
                 return null;
             }
 
-            tabla = this.GetTabla(nombreTabla);
             return tabla!.MapearAObjeto<T>();
         }
 

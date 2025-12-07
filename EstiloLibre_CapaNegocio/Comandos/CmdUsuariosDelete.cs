@@ -10,7 +10,7 @@ namespace EstiloLibre_CapaNegocio.Comandos
         :ComandoBase, IRequest
     {
         public int UsuarioId { get; set; }
-        public CmdUsuariosDelete(int iUsuarioId) : base([AccesoBD.CodigosPermisos.MOD_Usuarios])
+        public CmdUsuariosDelete(int iUsuarioId) : base([AccesoBD.Codigos.Permisos.MOD_Usuarios])
         {
             this.UsuarioId = iUsuarioId;
         }

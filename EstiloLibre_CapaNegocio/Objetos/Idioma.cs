@@ -1,4 +1,5 @@
 ﻿using EstiloLibre_CapaNegocio.Base;
+using EstiloLibre_CapaNegocio.DAOs;
 
 namespace EstiloLibre_CapaNegocio.Objetos;
 
@@ -16,7 +17,7 @@ public class Idioma : ObjetoBD
 
     public Idioma() : base() { }
 
-    public Idioma(DAO<Idioma> dao) : base(dao) { }
+    public Idioma(IdiomasDAO dao) : base(dao) { }
 
     #endregion
 }

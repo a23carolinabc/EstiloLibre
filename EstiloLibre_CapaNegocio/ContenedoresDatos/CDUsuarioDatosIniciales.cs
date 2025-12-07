@@ -46,14 +46,13 @@ namespace EstiloLibre_CapaNegocio.ContenedoresDatos
 
         public void Cargar(int iUsuarioId)
         {
-            DataSet datos;
             DataTable tabla;
             List<string> permisos;
 
             this.AgregarParametro("iUsuarioId", iUsuarioId, MySqlDbType.Int32);
 
             // Ejecutar consulta
-            datos = this.EjecutarConsulta();
+            this.EjecutarConsulta();
 
             this.Usuario = new Usuario();
             this.Usuario.IniciarListaPermisos();

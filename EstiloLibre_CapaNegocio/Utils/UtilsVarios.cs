@@ -7,6 +7,11 @@ namespace EstiloLibre_CapaNegocio.Utils
 {
     public static class UtilsVarios
     {
+        internal static string GenerarGUID()
+        {
+            return Guid.NewGuid().ToString();
+        }
+
         internal static string GenerarHash(string strTexto)
         {
             byte[] aTextoEnBytes;

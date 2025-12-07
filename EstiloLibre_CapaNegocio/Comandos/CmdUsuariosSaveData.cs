@@ -10,8 +10,8 @@ namespace EstiloLibre_CapaNegocio.Comandos
     public partial class CmdUsuariosSaveData
         : ComandoBase, IRequest<int>
     {
-        public Dtos.UsuarioSaveData UsuarioSaveData { get; set; }
-        public CmdUsuariosSaveData(Dtos.UsuarioSaveData usuarioSaveData) : base([AccesoBD.CodigosPermisos.MOD_Usuarios])
+        public Dtos.UsuarioSaveDataDTO UsuarioSaveData { get; set; }
+        public CmdUsuariosSaveData(Dtos.UsuarioSaveDataDTO usuarioSaveData) : base([AccesoBD.Codigos.Permisos.MOD_Usuarios])
         {
             this.UsuarioSaveData = usuarioSaveData;
         }
@@ -39,7 +39,7 @@ namespace EstiloLibre_CapaNegocio.Comandos
                 //Envolver todo el proceso en una transacción.
                 con.BeginTrans();
 
-                //Buscar si el aviso ya estaba registrado en BD.
+                //Buscar si el objeto ya estaba registrado en BD.
                 if (comando.UsuarioSaveData.Usuario.Id > 0)
                 {
                     usuario = con.CargarUsuario(comando.UsuarioSaveData.Usuario.Id);
