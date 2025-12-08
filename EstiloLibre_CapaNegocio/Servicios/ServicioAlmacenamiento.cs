@@ -7,10 +7,6 @@ using System.IO.Compression;
 
 namespace EstiloLibre_CapaNegocio.Servicios
 {
-    /// <summary>
-    /// Servicio para gestionar el almacenamiento físico de archivos (guardar, eliminar, comprimir, descomprimir)
-    /// NO gestiona objetos Adjunto en BD - eso se hace directamente en los comandos
-    /// </summary>
     public class ServicioAlmacenamiento
     {
         #region ***** PROPIEDADES *****
@@ -34,31 +30,13 @@ namespace EstiloLibre_CapaNegocio.Servicios
                 throw new CapaNegocioException("RutaGestorArchivos no está configurada");
             }
 
-            // Crear directorio si no existe
-            if (!Directory.Exists(rutaConfiguracion))
-            {
-                try
-                {
-                    Directory.CreateDirectory(rutaConfiguracion);
-                }
-                catch (Exception ex)
-                {
-                    throw new CapaNegocioException($"No se pudo crear el directorio de archivos: {ex.Message}");
-                }
-            }
-
             this._rutaBaseArchivos = rutaConfiguracion;
         }
 
         #endregion
 
-        #region ***** MÉTODOS PÚBLICOS - OPERACIONES CON ARCHIVOS *****
+        #region ***** MÉTODOS PÚBLICOS *****
 
-        /// <summary>
-        /// Guarda un archivo en el sistema de archivos (comprimido con GZip)
-        /// </summary>
-        /// <param name="adjunto">Objeto adjunto con información del archivo (debe tener NombreArchivo y ExtensionArchivo)</param>
-        /// <param name="contenidoBytes">Contenido del archivo sin comprimir</param>
         public async Task GuardarArchivo(Adjunto adjunto, byte[] contenidoBytes)
         {
             string rutaCompleta;
@@ -69,7 +47,7 @@ namespace EstiloLibre_CapaNegocio.Servicios
                 // Validar parámetros
                 if (adjunto == null)
                 {
-                    throw new ArgumentNullException(nameof(adjunto));
+                    throw new CapaNegocioException("Adjunto nulo "+ nameof(adjunto));
                 }
 
                 if (string.IsNullOrEmpty(adjunto.Guid))
@@ -97,10 +75,6 @@ namespace EstiloLibre_CapaNegocio.Servicios
             }
         }
 
-        /// <summary>
-        /// Elimina un archivo del sistema de archivos
-        /// </summary>
-        /// <param name="adjunto">Objeto adjunto con información del archivo</param>
         public void EliminarArchivo(Adjunto adjunto)
         {
             string rutaCompleta;
@@ -109,7 +83,7 @@ namespace EstiloLibre_CapaNegocio.Servicios
             {
                 if (adjunto == null)
                 {
-                    return;
+                    throw new CapaNegocioException("Adjunto nulo " + nameof(adjunto));
                 }
 
                 // Obtener ruta completa
@@ -123,17 +97,10 @@ namespace EstiloLibre_CapaNegocio.Servicios
             }
             catch (Exception ex)
             {
-                // No lanzar excepción en eliminación para no bloquear operaciones
-                // Solo registrar error
-                Console.WriteLine($"Error al eliminar archivo: {ex.Message}");
+                throw new CapaNegocioException($"Error al eliminar archivo: {ex.Message}", ex);
             }
         }
 
-        /// <summary>
-        /// Obtiene el contenido descomprimido de un archivo
-        /// </summary>
-        /// <param name="adjunto">Objeto adjunto con información del archivo</param>
-        /// <returns>Contenido del archivo descomprimido</returns>
         public async Task<byte[]> ObtenerContenidoArchivo(Adjunto adjunto)
         {
             string rutaCompleta;
@@ -144,7 +111,7 @@ namespace EstiloLibre_CapaNegocio.Servicios
             {
                 if (adjunto == null)
                 {
-                    throw new ArgumentNullException(nameof(adjunto));
+                    throw new CapaNegocioException(nameof(adjunto));
                 }
 
                 // Obtener ruta del archivo
@@ -169,18 +136,13 @@ namespace EstiloLibre_CapaNegocio.Servicios
             }
         }
 
-        /// <summary>
-        /// Obtiene la ruta completa del archivo físico
-        /// </summary>
-        /// <param name="adjunto">Objeto adjunto con información del archivo</param>
-        /// <returns>Ruta completa del archivo</returns>
         public string ObtenerRutaCompleta(Adjunto adjunto)
         {
             string rutaCompleta;
 
             if (adjunto == null)
             {
-                throw new ArgumentNullException(nameof(adjunto));
+                throw new CapaNegocioException(nameof(adjunto));
             }
 
             if (string.IsNullOrEmpty(adjunto.Guid))
@@ -192,40 +154,16 @@ namespace EstiloLibre_CapaNegocio.Servicios
             return rutaCompleta;
         }
 
-        /// <summary>
-        /// Verifica si existe el archivo físico
-        /// </summary>
-        /// <param name="adjunto">Objeto adjunto con información del archivo</param>
-        /// <returns>True si el archivo existe</returns>
         public bool ExisteArchivo(Adjunto adjunto)
         {
-            string rutaCompleta;
-
-            try
-            {
-                if (adjunto == null)
-                {
-                    return false;
-                }
-
-                rutaCompleta = this.ObtenerRutaCompleta(adjunto);
-                return File.Exists(rutaCompleta);
-            }
-            catch
+            if (adjunto == null || string.IsNullOrEmpty(adjunto.Guid))
             {
                 return false;
             }
+
+            return File.Exists(this.ObtenerRutaCompleta(adjunto));
         }
-
-        #endregion
-
-        #region ***** MÉTODOS PÚBLICOS - PROCESAMIENTO DE IMÁGENES *****
-
-        /// <summary>
-        /// Procesa una imagen: redimensiona si es necesario y convierte a formato WebP
-        /// </summary>
-        /// <param name="imagenBase64">Imagen en formato Base64</param>
-        /// <returns>Bytes de la imagen procesada en formato WebP</returns>
+                    
         public async Task<byte[]> ProcesarImagen(string imagenBase64)
         {
             byte[] imagenBytes;
@@ -247,11 +185,6 @@ namespace EstiloLibre_CapaNegocio.Servicios
             }
         }
 
-        /// <summary>
-        /// Procesa una imagen: redimensiona si es necesario y convierte a formato WebP
-        /// </summary>
-        /// <param name="imagenBytes">Bytes de la imagen original</param>
-        /// <returns>Bytes de la imagen procesada en formato WebP</returns>
         public async Task<byte[]> ProcesarImagenBytes(byte[] imagenBytes)
         {
             Image imagen;
@@ -262,21 +195,20 @@ namespace EstiloLibre_CapaNegocio.Servicios
             {
                 using (imagen = Image.Load(imagenBytes))
                 {
-                    // REDIMENSIONAR SI ES MUY GRANDE
                     // Máximo 1200 píxeles de ancho para optimizar almacenamiento
                     if (imagen.Width > 1200)
                     {
-                        imagen.Mutate(x => x.Resize(1200, 0)); // 0 = mantener proporción
+                        imagen.Mutate(x => x.Resize(1200, 0)); // 0 == mantener proporción
                     }
 
-                    // CONFIGURAR COMPRESOR WEBP
+                    // Compresos webp
                     encoder = new WebpEncoder
                     {
-                        Quality = 85, // Calidad 85/100 (buen balance tamaño/calidad)
-                        FileFormat = WebpFileFormatType.Lossy // Compresión con pérdida
+                        Quality = 85,
+                        FileFormat = WebpFileFormatType.Lossy
                     };
 
-                    // GUARDAR EN MEMORIA
+                    // Guardar imagen en memoria
                     using (MemoryStream stream = new MemoryStream())
                     {
                         await imagen.SaveAsync(stream, encoder);
@@ -292,11 +224,6 @@ namespace EstiloLibre_CapaNegocio.Servicios
             }
         }
 
-        /// <summary>
-        /// Obtiene una imagen en formato Base64 con prefijo data:image/webp;base64,
-        /// </summary>
-        /// <param name="adjunto">Adjunto de la imagen</param>
-        /// <returns>Imagen en formato Base64</returns>
         public async Task<string> ObtenerImagenBase64(Adjunto adjunto)
         {
             byte[] contenidoDescomprimido;
@@ -322,11 +249,6 @@ namespace EstiloLibre_CapaNegocio.Servicios
 
         #region ***** MÉTODOS PRIVADOS *****
 
-        /// <summary>
-        /// Comprime un array de bytes usando GZip
-        /// </summary>
-        /// <param name="datos">Datos a comprimir</param>
-        /// <returns>Datos comprimidos</returns>
         private byte[] ComprimirArchivo(byte[] datos)
         {
             byte[] datosComprimidos;
@@ -351,11 +273,6 @@ namespace EstiloLibre_CapaNegocio.Servicios
             }
         }
 
-        /// <summary>
-        /// Descomprime un array de bytes usando GZip
-        /// </summary>
-        /// <param name="datosComprimidos">Datos comprimidos</param>
-        /// <returns>Datos descomprimidos</returns>
         private byte[] DescomprimirArchivo(byte[] datosComprimidos)
         {
             byte[] datosDescomprimidos;

@@ -41,18 +41,27 @@ namespace EstiloLibre_CapaNegocio.AccesoBD
             return this.DbConexion;
         }
 
+        /// <summary>
+        /// Obtiene la transacción activa (si existe).
+        /// </summary>
+        /// <returns>La transacción activa o null si no hay ninguna.</returns>
+        internal DbTransaction? GetTransaccion()
+        {
+            return this.Transaccion;
+        }
+
         internal void PrepararComando(DbCommand comandoSql)
         {
             this.Conectar();
 
             comandoSql.Connection = this.DbConexion;
-            if(Transaccion != null)
+            if (this.Transaccion != null)
             {
-                comandoSql.Transaction = Transaccion;
+                comandoSql.Transaction = this.Transaccion;
             }
-            if(comandoSql.CommandTimeout <= 0 && Configuracion.iSqlQueryTimeOut > 0)
+            if (comandoSql.CommandTimeout <= 0 && this.Configuracion.iSqlQueryTimeOut > 0)
             {
-                comandoSql.CommandTimeout = Configuracion.iSqlQueryTimeOut;
+                comandoSql.CommandTimeout = this.Configuracion.iSqlQueryTimeOut;
             }
         }
 
@@ -95,25 +104,29 @@ namespace EstiloLibre_CapaNegocio.AccesoBD
             return comandoSql.ExecuteReader();
         }
 
-
         internal object? EjecutarComandoSql(DbCommand comandoSql)
         {
+            object? valorObjeto;
+
             this.PrepararComando(comandoSql);
 
-            object valorObjeto = RuntimeHelpers.GetObjectValue(comandoSql.ExecuteScalar());
-            
-            return valorObjeto == DBNull.Value? null: valorObjeto;
+            valorObjeto = RuntimeHelpers.GetObjectValue(comandoSql.ExecuteScalar());
+
+            return valorObjeto == DBNull.Value ? null : valorObjeto;
         }
 
         public DataTable GetTablaDatos(DbCommand comandoSql)
         {
-            return GetTablaDatos(comandoSql, string.Empty);
+            return this.GetTablaDatos(comandoSql, string.Empty);
         }
 
         public DataTable GetTablaDatos(DbCommand comandoSql, string nombreTabla)
         {
-            DataTable dataTable = new DataTable(nombreTabla);
-            DbDataReader dbDataReader = CrearSqlDataReader(comandoSql);
+            DataTable dataTable;
+            DbDataReader dbDataReader;
+
+            dataTable = new DataTable(nombreTabla);
+            dbDataReader = this.CrearSqlDataReader(comandoSql);
             try
             {
                 dataTable.Load(dbDataReader);
@@ -127,8 +140,11 @@ namespace EstiloLibre_CapaNegocio.AccesoBD
 
         public DataSet GetConjuntoDatos(DbCommand comandoSql, string[] nombresTablas)
         {
-            DbDataReader dbDataReader = CrearSqlDataReader(comandoSql);
-            DataSet dataSet = new DataSet();
+            DbDataReader dbDataReader;
+            DataSet dataSet;
+
+            dbDataReader = this.CrearSqlDataReader(comandoSql);
+            dataSet = new DataSet();
             try
             {
                 dataSet.Load(dbDataReader, LoadOption.Upsert, nombresTablas);
@@ -142,11 +158,11 @@ namespace EstiloLibre_CapaNegocio.AccesoBD
 
         public void Conectar()
         {
-            if(this.DbConexion == null)
+            if (this.DbConexion == null)
             {
                 this.DbConexion = new MySqlConnection(this.Configuracion.strCadenaConexion);
             }
-            if(this.DbConexion.State == ConnectionState.Closed)
+            if (this.DbConexion.State == ConnectionState.Closed)
             {
                 this.DbConexion.Open();
             }
@@ -157,12 +173,11 @@ namespace EstiloLibre_CapaNegocio.AccesoBD
             this.DbConexion.Close();
         }
 
-
         public void BeginTrans(bool bContinuar = false)
         {
             this.Conectar();
 
-            if(this.Transaccion != null)
+            if (this.Transaccion != null)
             {
                 if (!bContinuar)
                 {
@@ -175,7 +190,7 @@ namespace EstiloLibre_CapaNegocio.AccesoBD
 
         public void CommitTrans()
         {
-            if(this.Transaccion == null)
+            if (this.Transaccion == null)
             {
                 return;
             }
@@ -197,17 +212,17 @@ namespace EstiloLibre_CapaNegocio.AccesoBD
 
         protected virtual void Dispose(bool disposing)
         {
-            if (!_disposed && disposing)
+            if (!this._disposed && disposing)
             {
-                DbConexion.Close();
+                this.DbConexion.Close();
             }
 
-            _disposed = true;
+            this._disposed = true;
         }
 
         public void Dispose()
         {
-            Dispose(disposing: true);
+            this.Dispose(disposing: true);
             GC.SuppressFinalize(this);
         }
 

@@ -8,30 +8,28 @@ using System.Data.Common;
 
 namespace EstiloLibre_CapaNegocio.Base
 {
-    public abstract class DAO<T>: IDAO where T : ObjetoBD, new()
+    public abstract class DAO<T> : IDAO where T : ObjetoBD, new()
     {
-        #region ***** PROPIEDADES INTERNAS *****
-        #endregion
-
         #region ***** PROPIEDADES *****
 
-        public Conexion Conexion { get; set; }    
+        public Conexion Conexion { get; set; }
         protected string NombreTabla { get; set; }
-        protected string NombreTablaTraducciones { get; set; }        
+        protected string NombreTablaTraducciones { get; set; }
         protected string NombreColumnaEnlaceTraducciones { get; set; }
 
         #endregion
 
         #region ***** CONSTRUCTORES *****
 
-        public DAO(Conexion conexion, string strNombreTabla)             
+        public DAO(Conexion conexion, string strNombreTabla)
         {
             this.Conexion = conexion;
             this.NombreTabla = strNombreTabla;
         }
 
-        public DAO(Conexion conexion, string strNombreTabla, string strNombreTablaTraducciones, string strNombreColumnaEnlaceTraducciones)             
+        public DAO(Conexion conexion, string strNombreTabla, string strNombreTablaTraducciones, string strNombreColumnaEnlaceTraducciones)
         {
+            this.Conexion = conexion;
             this.NombreTabla = strNombreTabla;
             this.NombreTablaTraducciones = strNombreTablaTraducciones;
             this.NombreColumnaEnlaceTraducciones = strNombreColumnaEnlaceTraducciones;
@@ -42,22 +40,6 @@ namespace EstiloLibre_CapaNegocio.Base
         #region ***** MÉTODOS PÚBLICOS *****
 
         public abstract ObjetoBD CrearObjetoBD();
-
-
-        //public virtual ObjetoBD CrearObjetoBDTraduccion()
-        //{
-        //    return null;
-        //}
-
-        //protected ObjetoTraduccionDAO GetDAOObjetoTraduccion()
-        //{
-        //    return new ObjetoTraduccionDAO(this.Conexion, this.NombreTablaTraducciones, this.NombreColumnaEnlaceTraducciones);
-        //}
-
-        //protected virtual int GetIdiomaId()
-        //{
-        //    return this.Conexion.IdiomaActualId;
-        //}
 
         public ObjetoBD? CargarObjetoBD(int iId)
         {
@@ -82,10 +64,10 @@ namespace EstiloLibre_CapaNegocio.Base
             T? objetoBD;
             string strSql;
 
-            strSql = $"SELECT * FROM {NombreTabla} WHERE {clausulaWhere}";            
+            strSql = $"SELECT * FROM {this.NombreTabla} WHERE {clausulaWhere}";
             if (!string.IsNullOrEmpty(orderBy))
             {
-                strSql = $" ORDER BY {orderBy}";
+                strSql += $" ORDER BY {orderBy}";
             }
 
             conexion = this.Conexion.ConexionBD.GetConexion();
@@ -101,13 +83,19 @@ namespace EstiloLibre_CapaNegocio.Base
         public void GuardarObjetoBD(ObjetoBD objeto)
         {
             IDbConnection conexion;
-            T obj = (T)objeto;
+            DbTransaction? transaccion;
+            T obj;
+            long nuevoId;
+            bool actualizado;
 
+            obj = (T)objeto;
             conexion = this.Conexion.ConexionBD.GetConexion();
+            transaccion = this.Conexion.ConexionBD.GetTransaccion();
+
             if (obj.Id <= 0)
             {
-                // Recoger id generado
-                long nuevoId = conexion.Insert<T>(obj);
+                // Insertar nuevo registro pasando la transacción activa
+                nuevoId = conexion.Insert<T>(obj, transaccion);
 
                 if (nuevoId <= 0)
                 {
@@ -121,7 +109,8 @@ namespace EstiloLibre_CapaNegocio.Base
             }
             else
             {
-                bool actualizado = conexion.Update<T>(obj);
+                // Actualizar registro existente pasando la transacción activa
+                actualizado = conexion.Update<T>(obj, transaccion);
                 if (!actualizado)
                 {
                     throw new CapaNegocioException($"No se pudo actualizar el objeto con Id {obj.Id}");
@@ -132,9 +121,11 @@ namespace EstiloLibre_CapaNegocio.Base
         public void EliminarObjetoBD(ObjetoBD objeto)
         {
             IDbConnection conexion;
+            DbTransaction? transaccion;
             bool eliminado;
+            T obj;
 
-            T obj = (T)objeto;
+            obj = (T)objeto;
 
             if (obj.Id <= 0)
             {
@@ -142,7 +133,10 @@ namespace EstiloLibre_CapaNegocio.Base
             }
 
             conexion = this.Conexion.ConexionBD.GetConexion();
-            eliminado = conexion.Delete<T>(obj);
+            transaccion = this.Conexion.ConexionBD.GetTransaccion();
+
+            // Eliminar registro pasando la transacción activa
+            eliminado = conexion.Delete<T>(obj, transaccion);
             if (!eliminado)
             {
                 throw new CapaNegocioException($"No se pudo eliminar el objeto con Id {obj.Id}");
@@ -158,8 +152,8 @@ namespace EstiloLibre_CapaNegocio.Base
             conexion = this.Conexion.ConexionBD.GetConexion();
 
             resultado = conexion.GetAll<T>().ToList();
-            resultado.ForEach(o  => o.DAO = this);
-            
+            resultado.ForEach(o => o.DAO = this);
+
             lista = new(resultado);
             return lista;
         }
@@ -172,7 +166,7 @@ namespace EstiloLibre_CapaNegocio.Base
             string strSql;
             string idsString;
 
-            if (ids == null || ids.Count == 0 )
+            if (ids == null || ids.Count == 0)
             {
                 return new ListaObjetosBD<T>();
             }
@@ -228,6 +222,10 @@ namespace EstiloLibre_CapaNegocio.Base
         public void GuardarObjetosBD(List<ObjetoBD> objetos)
         {
             IDbConnection conexion;
+            DbTransaction? transaccion;
+            T obj;
+            long nuevoId;
+            bool actualizado;
 
             if (objetos == null || objetos.Count == 0)
             {
@@ -235,19 +233,16 @@ namespace EstiloLibre_CapaNegocio.Base
             }
 
             conexion = this.Conexion.ConexionBD.GetConexion();
+            transaccion = this.Conexion.ConexionBD.GetTransaccion();
 
             foreach (ObjetoBD objeto in objetos)
             {
-                T obj;
-
                 obj = (T)objeto;
 
                 if (obj.Id <= 0)
                 {
-                    long nuevoId;
-
-                    // Insertar nuevo objeto
-                    nuevoId = conexion.Insert<T>(obj);
+                    // Insertar nuevo objeto pasando la transacción activa
+                    nuevoId = conexion.Insert<T>(obj, transaccion);
 
                     if (nuevoId <= 0)
                     {
@@ -261,10 +256,8 @@ namespace EstiloLibre_CapaNegocio.Base
                 }
                 else
                 {
-                    bool actualizado;
-
-                    // Actualizar objeto existente
-                    actualizado = conexion.Update<T>(obj);
+                    // Actualizar objeto existente pasando la transacción activa
+                    actualizado = conexion.Update<T>(obj, transaccion);
                     if (!actualizado)
                     {
                         throw new CapaNegocioException($"No se pudo actualizar el objeto con Id {obj.Id}");
@@ -276,6 +269,9 @@ namespace EstiloLibre_CapaNegocio.Base
         public void EliminarObjetosBD(List<ObjetoBD> objetos)
         {
             IDbConnection conexion;
+            DbTransaction? transaccion;
+            T obj;
+            bool eliminado;
 
             if (objetos == null || objetos.Count == 0)
             {
@@ -283,12 +279,10 @@ namespace EstiloLibre_CapaNegocio.Base
             }
 
             conexion = this.Conexion.ConexionBD.GetConexion();
+            transaccion = this.Conexion.ConexionBD.GetTransaccion();
 
             foreach (ObjetoBD objeto in objetos)
             {
-                T obj;
-                bool eliminado;
-
                 obj = (T)objeto;
 
                 if (obj.Id <= 0)
@@ -296,7 +290,8 @@ namespace EstiloLibre_CapaNegocio.Base
                     throw new CapaNegocioException("No se puede eliminar un objeto sin Id asociado");
                 }
 
-                eliminado = conexion.Delete<T>(obj);
+                // Eliminar objeto pasando la transacción activa
+                eliminado = conexion.Delete<T>(obj, transaccion);
                 if (!eliminado)
                 {
                     throw new CapaNegocioException($"No se pudo eliminar el objeto con Id {obj.Id}");
@@ -304,28 +299,6 @@ namespace EstiloLibre_CapaNegocio.Base
             }
         }
 
-        public void EliminarObjetosBDPorIds(List<int> ids)
-        {
-            ListaObjetosBD<T> objetos;
-
-            if (ids == null || ids.Count == 0)
-            {
-                return;
-            }
-
-            // Cargar los objetos
-            objetos = this.CargarObjetosBD(ids);
-
-            // Convertir a lista de ObjetoBD
-            List<ObjetoBD> listaObjetos = objetos.Cast<ObjetoBD>().ToList();
-
-            // Eliminar
-            this.EliminarObjetosBD(listaObjetos);
-        }
-
-        #endregion
-
-        #region ***** MÉTODOS PRIVADOS *****        
         #endregion
     }
 }
