@@ -171,6 +171,12 @@ namespace EstiloLibre_CapaNegocio.Servicios
 
             try
             {
+                //if (imagenBase64.Contains(","))
+                //{
+                //    // Formato: "data:image/webp;base64,UklGRt..."
+                //    // Tomar solo la parte después de la coma
+                //    imagenBase64 = imagenBase64.Substring(imagenBase64.IndexOf(",") + 1);
+                //}
                 // Convertir Base64 a bytes
                 imagenBytes = Convert.FromBase64String(imagenBase64);
 

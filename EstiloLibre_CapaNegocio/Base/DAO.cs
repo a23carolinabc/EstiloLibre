@@ -52,7 +52,7 @@ namespace EstiloLibre_CapaNegocio.Base
 
             if (iId <= 0) return null;
 
-            objetoBD = conexion.Get<T>(iId);
+            objetoBD = conexion.Get<T>(iId, transaction: transaccion);
             if (objetoBD != null)
             {
                 objetoBD.DAO = this;
@@ -77,7 +77,7 @@ namespace EstiloLibre_CapaNegocio.Base
                 strSql += $" ORDER BY {orderBy}";
             }
 
-            objetoBD = conexion.QueryFirstOrDefault<T>(strSql);
+            objetoBD = conexion.QueryFirstOrDefault<T>(strSql, transaction: transaccion);
             if (objetoBD != null)
             {
                 objetoBD.DAO = this;
@@ -101,7 +101,7 @@ namespace EstiloLibre_CapaNegocio.Base
             if (obj.Id <= 0)
             {
                 // Insertar nuevo registro pasando la transacción activa
-                nuevoId = conexion.Insert<T>(obj, transaccion);
+                nuevoId = conexion.Insert<T>(obj, transaction: transaccion);
 
                 if (nuevoId <= 0)
                 {
@@ -116,7 +116,7 @@ namespace EstiloLibre_CapaNegocio.Base
             else
             {
                 // Actualizar registro existente pasando la transacción activa
-                actualizado = conexion.Update<T>(obj, transaccion);
+                actualizado = conexion.Update<T>(obj, transaction: transaccion);
                 if (!actualizado)
                 {
                     throw new CapaNegocioException($"No se pudo actualizar el objeto con Id {obj.Id}");
@@ -142,7 +142,7 @@ namespace EstiloLibre_CapaNegocio.Base
             transaccion = this.Conexion.ConexionBD.GetTransaccion();
 
             // Eliminar registro pasando la transacción activa
-            eliminado = conexion.Delete<T>(obj, transaccion);
+            eliminado = conexion.Delete<T>(obj, transaction: transaccion);
             if (!eliminado)
             {
                 throw new CapaNegocioException($"No se pudo eliminar el objeto con Id {obj.Id}");
@@ -159,7 +159,7 @@ namespace EstiloLibre_CapaNegocio.Base
             conexion = this.Conexion.ConexionBD.GetConexion();
             transaccion = this.Conexion.ConexionBD.GetTransaccion();
 
-            resultado = conexion.GetAll<T>().ToList();
+            resultado = conexion.GetAll<T>(transaction: transaccion).ToList();
             resultado.ForEach(o => o.DAO = this);
 
             lista = new(resultado);
@@ -193,7 +193,7 @@ namespace EstiloLibre_CapaNegocio.Base
             idsString = string.Join(",", ids);
             strSql = $"SELECT * FROM {this.NombreTabla} WHERE Id IN ({idsString})";
 
-            resultado = conexion.Query<T>(strSql).ToList();
+            resultado = conexion.Query<T>(strSql, transaction: transaccion).ToList();
 
             foreach (var obj in resultado)
             {
@@ -226,7 +226,7 @@ namespace EstiloLibre_CapaNegocio.Base
                 strSql += $" ORDER BY {orderBy}";
             }
 
-            resultado = conexion.Query<T>(strSql).ToList();
+            resultado = conexion.Query<T>(strSql, transaction: transaccion).ToList();
             resultado.ForEach(o => o.DAO = this);
 
             lista = new ListaObjetosBD<T>(resultado);
@@ -256,7 +256,7 @@ namespace EstiloLibre_CapaNegocio.Base
                 if (obj.Id <= 0)
                 {
                     // Insertar nuevo objeto pasando la transacción activa
-                    nuevoId = conexion.Insert<T>(obj, transaccion);
+                    nuevoId = conexion.Insert<T>(obj, transaction: transaccion);
 
                     if (nuevoId <= 0)
                     {
@@ -271,7 +271,7 @@ namespace EstiloLibre_CapaNegocio.Base
                 else
                 {
                     // Actualizar objeto existente pasando la transacción activa
-                    actualizado = conexion.Update<T>(obj, transaccion);
+                    actualizado = conexion.Update<T>(obj, transaction: transaccion);
                     if (!actualizado)
                     {
                         throw new CapaNegocioException($"No se pudo actualizar el objeto con Id {obj.Id}");
@@ -305,7 +305,7 @@ namespace EstiloLibre_CapaNegocio.Base
                 }
 
                 // Eliminar objeto pasando la transacción activa
-                eliminado = conexion.Delete<T>(obj, transaccion);
+                eliminado = conexion.Delete<T>(obj, transaction: transaccion);
                 if (!eliminado)
                 {
                     throw new CapaNegocioException($"No se pudo eliminar el objeto con Id {obj.Id}");
