@@ -16,6 +16,9 @@
         public const string Permisos = "Permisos";         
         public const string PermisosUsuarios = "PermisosUsuarios";         
         public const string Prendas = "Prendas";         
-        public const string Tallas = "Tallas";         
+        public const string Tallas = "Tallas";
+        public const string Conjuntos = "Conjuntos";
+        public const string PrendasConjuntos = "PrendasConjuntos";
+        public const string Estilos = "Estilos";
     }
 }

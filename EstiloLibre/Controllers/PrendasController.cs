@@ -33,18 +33,7 @@ public class PrendasController
     #endregion
 
     #region ***** MÉTODOS PÚBLICOS *****
-
-    [Route("actualizarDatosSesion")]
-    [HttpPost]
-    [ProducesResponseType((int)HttpStatusCode.OK)]
-    public async Task<IActionResult> ActualizarDatosDeSesion([FromBody] CmdActualizarDatosSesion comando)
-    {
-        //Enviar el comando al mediador para su procesamiento.
-        await _mediador.Send(comando);
-
-        //Devolver el resultado de la ejecución.
-        return Ok();
-    }
+        
 
     [Route("addnew")]
     [HttpGet]

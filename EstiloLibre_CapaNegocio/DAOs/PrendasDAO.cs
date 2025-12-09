@@ -1,5 +1,6 @@
 ﻿using EstiloLibre_CapaNegocio.AccesoBD;
 using EstiloLibre_CapaNegocio.Base;
+using EstiloLibre_CapaNegocio.Colecciones;
 using EstiloLibre_CapaNegocio.Objetos;
 using System.Data.Common;
 
@@ -20,6 +21,15 @@ namespace EstiloLibre_CapaNegocio.DAOs
         public Prenda? CargarPrenda(int iPrendaId)
         {
             return (Prenda?)this.CargarObjetoBD(iPrendaId);
+        }
+
+        public Prendas CargarPrendas(int iUsuarioId)
+        {
+            Prendas prendas;
+
+            prendas = new(this.CargarObjetosBD($"UsuarioId = {iUsuarioId}"));
+
+            return prendas;
         }
         #endregion
     }    

@@ -32,6 +32,7 @@ namespace EstiloLibre_CapaNegocio.Utils
             //Registrar consultas.
             services.AddScoped<ConsultasUsuarios>();
             services.AddScoped<ConsultasPrendas>();
+            services.AddScoped<ConsultasConjuntos>();
         }
         #endregion
     }
