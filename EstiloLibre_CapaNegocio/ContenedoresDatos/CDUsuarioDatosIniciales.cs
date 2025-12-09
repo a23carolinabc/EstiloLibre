@@ -37,7 +37,7 @@ namespace EstiloLibre_CapaNegocio.ContenedoresDatos
 
         protected override string[] DefinirNombresTablas()
         {
-            return new string[] { "Usuario", "Permisos" };
+            return new string[] { TablasBD.Usuarios, TablasBD.Permisos };
         }
 
         #endregion
@@ -58,31 +58,32 @@ namespace EstiloLibre_CapaNegocio.ContenedoresDatos
             this.Usuario.IniciarListaPermisos();
 
             // Asignar datos del usuario
-            if (this.TablaTieneDatos("Usuario"))
-            {
-                tabla = this.GetTabla("Usuario")!;
+            this.Usuario = this.MapearObjeto<Usuario>(TablasBD.Usuarios)??new();
+            //if (this.TablaTieneDatos("Usuario"))
+            //{
+            //    tabla = this.GetTabla("Usuario")!;
 
-                foreach (DataRow fila in tabla.Rows)
-                {
-                    this.Usuario.Id = UtilsConversion.GetInt(fila["Id"]) ?? 0;
-                    this.Usuario.Login = UtilsConversion.GetString(fila["Login"])!;
-                    this.Usuario.Contraseña = UtilsConversion.GetString(fila["Contraseña"])!;
-                    this.Usuario.Nombre = UtilsConversion.GetString(fila["Nombre"])!;
-                    this.Usuario.Apellido1 = UtilsConversion.GetString(fila["Apellido1"])!;
-                    this.Usuario.Apellido2 = UtilsConversion.GetString(fila["Apellido2"]);
-                    this.Usuario.FechaNacimiento = UtilsConversion.GetDateTime(fila["FechaNacimiento"]);
-                    this.Usuario.CorreoE = UtilsConversion.GetString(fila["CorreoE"]);
-                    this.Usuario.Telefono = UtilsConversion.GetInt(fila["Telefono"]);
-                    this.Usuario.FechaBaja = UtilsConversion.GetDateTime(fila["FechaBaja"]);
-                    this.Usuario.Publico = UtilsConversion.GetBool(fila["Publico"]);
-                    this.Usuario.IdiomaId = UtilsConversion.GetInt(fila["IdiomaId"])??0;
-                }
-            }
+            //    foreach (DataRow fila in tabla.Rows)
+            //    {
+            //        this.Usuario.Id = UtilsConversion.GetInt(fila["Id"]) ?? 0;
+            //        this.Usuario.Login = UtilsConversion.GetString(fila["Login"])!;
+            //        this.Usuario.Contraseña = UtilsConversion.GetString(fila["Contraseña"])!;
+            //        this.Usuario.Nombre = UtilsConversion.GetString(fila["Nombre"])!;
+            //        this.Usuario.Apellido1 = UtilsConversion.GetString(fila["Apellido1"])!;
+            //        this.Usuario.Apellido2 = UtilsConversion.GetString(fila["Apellido2"]);
+            //        this.Usuario.FechaNacimiento = UtilsConversion.GetDateTime(fila["FechaNacimiento"]);
+            //        this.Usuario.CorreoE = UtilsConversion.GetString(fila["CorreoE"]);
+            //        this.Usuario.Telefono = UtilsConversion.GetInt(fila["Telefono"]);
+            //        this.Usuario.FechaBaja = UtilsConversion.GetDateTime(fila["FechaBaja"]);
+            //        this.Usuario.Publico = UtilsConversion.GetBool(fila["Publico"]);
+            //        this.Usuario.IdiomaId = UtilsConversion.GetInt(fila["IdiomaId"])??0;
+            //    }
+            //}
 
             // Asignar permisos
-            if (this.TablaTieneDatos("Permisos"))
+            if (this.TablaTieneDatos(TablasBD.Permisos))
             {
-                tabla = this.GetTabla("Permisos")!;
+                tabla = this.GetTabla(TablasBD.Permisos)!;
 
                 permisos = new List<string>();
 

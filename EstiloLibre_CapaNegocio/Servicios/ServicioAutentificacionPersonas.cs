@@ -27,7 +27,7 @@ namespace EstiloLibre_CapaNegocio.Servicios
 
         #region ***** MÉTODOS PÚBLICOS *****
 
-        public ResultadoAutentificacion Autentificar(CredencialesUsuarioCapaNegocioDto datosUsuario)
+        public ResultadoAutentificacion Autentificar(CredencialesUsuarioCapaNegocioDTO datosUsuario)
         {
             ResultadoAutentificacion resultado;
 
@@ -43,7 +43,7 @@ namespace EstiloLibre_CapaNegocio.Servicios
 
         #region ***** MÉTODOS PRIVADOS *****
 
-        private ResultadoAutentificacion AutentificarUsuario(CredencialesUsuarioCapaNegocioDto credenciales)
+        private ResultadoAutentificacion AutentificarUsuario(CredencialesUsuarioCapaNegocioDTO credenciales)
         {
             Usuario? usuario;
             CDUsuarioDatosIniciales modelo;

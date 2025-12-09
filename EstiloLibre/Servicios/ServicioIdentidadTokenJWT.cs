@@ -32,9 +32,9 @@ namespace EstiloLibre.Servicios
 
         public ResultadoAutentificacion AutentificarUsuarioEnCapaNegocio(CredencialesUsuario credenciales)
         {
-            CredencialesUsuarioCapaNegocioDto credencialesCapaNegocio;
+            CredencialesUsuarioCapaNegocioDTO credencialesCapaNegocio;
 
-            credencialesCapaNegocio = new CredencialesUsuarioCapaNegocioDto()
+            credencialesCapaNegocio = new CredencialesUsuarioCapaNegocioDTO()
             {
                 NombreDeUsuario = credenciales.Login,
                 Contraseña = credenciales.Contraseña,

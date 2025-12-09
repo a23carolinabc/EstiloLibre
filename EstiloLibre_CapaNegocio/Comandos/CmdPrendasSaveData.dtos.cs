@@ -8,7 +8,7 @@ namespace EstiloLibre_CapaNegocio.Comandos
 {
     public partial class CmdPrendasSaveData
     {
-        public class Dtos
+        public class DTOs
         {
             public class PrendaSaveDataDTO
             {

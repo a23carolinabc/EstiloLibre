@@ -2,7 +2,7 @@
 {
     public partial class CmdUsuariosSaveData
     {
-        public class Dtos
+        public class DTOs
         {
             public class UsuarioSaveDataDTO
             {

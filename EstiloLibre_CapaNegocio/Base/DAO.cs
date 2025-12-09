@@ -45,10 +45,13 @@ namespace EstiloLibre_CapaNegocio.Base
         {
             T? objetoBD;
             IDbConnection conexion;
+            DbTransaction? transaccion;
+
+            conexion = this.Conexion.ConexionBD.GetConexion();
+            transaccion = this.Conexion.ConexionBD.GetTransaccion();
 
             if (iId <= 0) return null;
 
-            conexion = this.Conexion.ConexionBD.GetConexion();
             objetoBD = conexion.Get<T>(iId);
             if (objetoBD != null)
             {
@@ -60,9 +63,13 @@ namespace EstiloLibre_CapaNegocio.Base
 
         public ObjetoBD? CargarObjetoBD(string clausulaWhere, string? orderBy = null)
         {
-            IDbConnection conexion;
             T? objetoBD;
             string strSql;
+            IDbConnection conexion;
+            DbTransaction? transaccion;
+
+            conexion = this.Conexion.ConexionBD.GetConexion();
+            transaccion = this.Conexion.ConexionBD.GetTransaccion();
 
             strSql = $"SELECT * FROM {this.NombreTabla} WHERE {clausulaWhere}";
             if (!string.IsNullOrEmpty(orderBy))
@@ -70,7 +77,6 @@ namespace EstiloLibre_CapaNegocio.Base
                 strSql += $" ORDER BY {orderBy}";
             }
 
-            conexion = this.Conexion.ConexionBD.GetConexion();
             objetoBD = conexion.QueryFirstOrDefault<T>(strSql);
             if (objetoBD != null)
             {
@@ -148,8 +154,10 @@ namespace EstiloLibre_CapaNegocio.Base
             ListaObjetosBD<T> lista;
             List<T> resultado;
             IDbConnection conexion;
+            DbTransaction? transaccion;
 
             conexion = this.Conexion.ConexionBD.GetConexion();
+            transaccion = this.Conexion.ConexionBD.GetTransaccion();
 
             resultado = conexion.GetAll<T>().ToList();
             resultado.ForEach(o => o.DAO = this);
@@ -160,11 +168,15 @@ namespace EstiloLibre_CapaNegocio.Base
 
         public ListaObjetosBD<T> CargarObjetosBD(List<int> ids)
         {
-            ListaObjetosBD<T> lista;
-            IDbConnection conexion;
+            ListaObjetosBD<T> lista;            
             List<T> resultado;
             string strSql;
-            string idsString;
+            string idsString; 
+            IDbConnection conexion;
+            DbTransaction? transaccion;
+
+            conexion = this.Conexion.ConexionBD.GetConexion();
+            transaccion = this.Conexion.ConexionBD.GetTransaccion();
 
             if (ids == null || ids.Count == 0)
             {
@@ -178,7 +190,6 @@ namespace EstiloLibre_CapaNegocio.Base
                 return new ListaObjetosBD<T>();
             }
 
-            conexion = this.Conexion.ConexionBD.GetConexion();
             idsString = string.Join(",", ids);
             strSql = $"SELECT * FROM {this.NombreTabla} WHERE Id IN ({idsString})";
 
@@ -195,10 +206,14 @@ namespace EstiloLibre_CapaNegocio.Base
 
         public ListaObjetosBD<T> CargarObjetosBD(string clausulaWhere, string? orderBy = null)
         {
-            IDbConnection conexion;
             List<T> resultado;
             string strSql;
-            ListaObjetosBD<T> lista;
+            ListaObjetosBD<T> lista; 
+            IDbConnection conexion;
+            DbTransaction? transaccion;
+
+            conexion = this.Conexion.ConexionBD.GetConexion();
+            transaccion = this.Conexion.ConexionBD.GetTransaccion();
 
             if (string.IsNullOrEmpty(clausulaWhere))
             {
@@ -211,7 +226,6 @@ namespace EstiloLibre_CapaNegocio.Base
                 strSql += $" ORDER BY {orderBy}";
             }
 
-            conexion = this.Conexion.ConexionBD.GetConexion();
             resultado = conexion.Query<T>(strSql).ToList();
             resultado.ForEach(o => o.DAO = this);
 

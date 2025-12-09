@@ -7,7 +7,7 @@ using EstiloLibre_CapaNegocio.Consultas;
 using EstiloLibre_CapaNegocio.ObjetosDTO.Seguridad;
 using System.Net;
 using static EstiloLibre_CapaNegocio.Comandos.CmdUsuariosDelete;
-using static EstiloLibre_CapaNegocio.Comandos.CmdUsuariosSaveData.Dtos;
+using static EstiloLibre_CapaNegocio.Comandos.CmdUsuariosSaveData.DTOs;
 
 namespace EstiloLibre.Controllers;
 

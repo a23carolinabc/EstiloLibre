@@ -6,7 +6,7 @@ using EstiloLibre_CapaNegocio.Objetos;
 using EstiloLibre_CapaNegocio.Servicios;
 using EstiloLibre_CapaNegocio.Utils;
 using MediatR;
-using static EstiloLibre_CapaNegocio.Comandos.CmdPrendasSaveData.Dtos;
+using static EstiloLibre_CapaNegocio.Comandos.CmdPrendasSaveData.DTOs;
 
 namespace EstiloLibre_CapaNegocio.Comandos
 {

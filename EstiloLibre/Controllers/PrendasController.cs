@@ -4,8 +4,8 @@ using EstiloLibre_CapaNegocio.Consultas;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
-using static EstiloLibre_CapaNegocio.Comandos.CmdPrendasSaveData.Dtos;
-using static EstiloLibre_CapaNegocio.Consultas.ConsultasPrendas.Dtos;
+using static EstiloLibre_CapaNegocio.Comandos.CmdPrendasSaveData.DTOs;
+using static EstiloLibre_CapaNegocio.Consultas.ConsultasPrendas.DTOs;
 
 namespace EstiloLibre.Controllers;
 
@@ -48,16 +48,30 @@ public class PrendasController
 
     [Route("addnew")]
     [HttpGet]
-    [ProducesResponseType(typeof(PrendasAddNewDto), (int)HttpStatusCode.OK)]
+    [ProducesResponseType(typeof(PrendasAddNewDTO), (int)HttpStatusCode.OK)]
     public IActionResult AddNew()
     {
-        PrendasAddNewDto objeto;
+        PrendasAddNewDTO objeto;
 
         //Recuperar datos necesarios para el addnew.
         objeto = this._consultasPrendas.GetDatosAddNew();
 
         //Devolver el resultado de la ejecución.
         return Ok(objeto);        
+    }
+
+    [Route("showdata/{id}")]
+    [HttpGet]
+    [ProducesResponseType(typeof(PrendasShowDataDTO), (int)HttpStatusCode.OK)]
+    public async Task<IActionResult> ShowData([FromRoute] int id)
+    {
+        PrendasShowDataDTO objeto;
+
+        //Recuperar datos necesarios para el showdata.
+        objeto = await this._consultasPrendas.GetDatosShowData(id);
+
+        //Devolver el resultado de la ejecución.
+        return Ok(objeto);
     }
 
     [Route("savedata")]

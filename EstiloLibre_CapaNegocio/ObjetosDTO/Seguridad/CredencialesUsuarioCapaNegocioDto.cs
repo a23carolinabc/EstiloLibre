@@ -1,6 +1,6 @@
 ﻿namespace EstiloLibre_CapaNegocio.ObjetosDTO.Seguridad;
 
-public class CredencialesUsuarioCapaNegocioDto
+public class CredencialesUsuarioCapaNegocioDTO
 {
     public required string NombreDeUsuario { get; set; }
     public required string Contraseña { get; set; }

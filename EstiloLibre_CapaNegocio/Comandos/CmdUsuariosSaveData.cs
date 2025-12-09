@@ -10,8 +10,8 @@ namespace EstiloLibre_CapaNegocio.Comandos
     public partial class CmdUsuariosSaveData
         : ComandoBase, IRequest<int>
     {
-        public Dtos.UsuarioSaveDataDTO UsuarioSaveData { get; set; }
-        public CmdUsuariosSaveData(Dtos.UsuarioSaveDataDTO usuarioSaveData) : base([AccesoBD.Codigos.Permisos.MOD_Usuarios])
+        public DTOs.UsuarioSaveDataDTO UsuarioSaveData { get; set; }
+        public CmdUsuariosSaveData(DTOs.UsuarioSaveDataDTO usuarioSaveData) : base([AccesoBD.Codigos.Permisos.MOD_Usuarios])
         {
             this.UsuarioSaveData = usuarioSaveData;
         }
