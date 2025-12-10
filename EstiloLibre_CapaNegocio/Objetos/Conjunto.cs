@@ -10,7 +10,6 @@ namespace EstiloLibre_CapaNegocio.Objetos
         #region ****** PROPIEDADES *****
 
         public int UsuarioId { get; set; }
-        public string Nombre { get; set; }
         public int? EstacionId { get; set; }
         public int? EstiloId { get; set; }
         public string? Descripcion { get; set; }

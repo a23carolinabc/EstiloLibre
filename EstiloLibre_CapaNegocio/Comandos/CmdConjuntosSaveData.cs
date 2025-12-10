@@ -46,7 +46,6 @@ namespace EstiloLibre_CapaNegocio.Comandos
             byte[] byImagen;
             bool bEsActualizacion;
             PrendasConjuntos conjuntosPrendasAntiguos;
-            int iOrden;
 
             bEsActualizacion = false;
             base.VericarPermisos(comando);
@@ -72,7 +71,6 @@ namespace EstiloLibre_CapaNegocio.Comandos
                 }
 
                 // Transferir propiedades del DTO al objeto de BD
-                conjunto.Nombre = comando.Conjunto.Nombre;
                 conjunto.EstacionId = comando.Conjunto.EstacionId;
                 conjunto.EstiloId = comando.Conjunto.EstiloId;
                 conjunto.Descripcion = comando.Conjunto.Descripcion;
@@ -99,7 +97,6 @@ namespace EstiloLibre_CapaNegocio.Comandos
                 }
 
                 // Crear nuevas relaciones
-                iOrden = 0;
                 foreach (int iPrendaId in comando.Conjunto.PrendasIds)
                 {
                     PrendaConjunto conjuntoPrenda;

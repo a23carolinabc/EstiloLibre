@@ -13,7 +13,6 @@ namespace EstiloLibre_CapaNegocio.Comandos
             public class ConjuntoSaveDataDTO
             {
                 public int Id { get; set; }
-                public string Nombre { get; set; }
                 public int EstacionId { get; set; }
                 public int? EstiloId { get; set; }
                 public string? Descripcion { get; set; }

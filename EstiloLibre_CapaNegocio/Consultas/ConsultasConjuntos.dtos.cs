@@ -14,7 +14,6 @@ namespace EstiloLibre_CapaNegocio.Consultas
         {
             public class ConjuntosAddNewDTO
             {
-                public IEnumerable<ControlItem> Ocasiones { get; set; }
                 public IEnumerable<ControlItem> Estaciones { get; set; }
                 public IEnumerable<ControlItem> Estilos { get; set; }
                 public IEnumerable<ControlItem> Colores { get; set; }
@@ -23,7 +22,6 @@ namespace EstiloLibre_CapaNegocio.Consultas
             public class ConjuntosShowDataDTO
             {
                 public ConjuntoDTO? Conjunto { get; set; }
-                public IEnumerable<ControlItem> Ocasiones { get; set; }
                 public IEnumerable<ControlItem> Estaciones { get; set; }
                 public IEnumerable<ControlItem> Estilos { get; set; }
                 public IEnumerable<ControlItem> Colores { get; set; }
@@ -33,7 +31,6 @@ namespace EstiloLibre_CapaNegocio.Consultas
             {
                 public int Id { get; set; }
                 public int UsuarioId { get; set; }
-                public string Nombre { get; set; }
                 public int? EstacionId { get; set; }
                 public int? EstiloId { get; set; }
                 public string? Descripcion { get; set; }
@@ -50,7 +47,6 @@ namespace EstiloLibre_CapaNegocio.Consultas
                 {
                     this.Id = conjunto.Id;
                     this.UsuarioId = conjunto.UsuarioId;
-                    this.Nombre = conjunto.Nombre;
                     this.EstacionId = conjunto.EstacionId;
                     this.EstiloId = conjunto.EstiloId;
                     this.Descripcion = conjunto.Descripcion;
