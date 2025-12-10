@@ -30,7 +30,6 @@ namespace EstiloLibre_CapaNegocio.Consultas
             public class ConjuntoDTO
             {
                 public int Id { get; set; }
-                public int UsuarioId { get; set; }
                 public int? EstacionId { get; set; }
                 public int? EstiloId { get; set; }
                 public string? Descripcion { get; set; }
@@ -46,7 +45,6 @@ namespace EstiloLibre_CapaNegocio.Consultas
                 public ConjuntoDTO(Conjunto conjunto)
                 {
                     this.Id = conjunto.Id;
-                    this.UsuarioId = conjunto.UsuarioId;
                     this.EstacionId = conjunto.EstacionId;
                     this.EstiloId = conjunto.EstiloId;
                     this.Descripcion = conjunto.Descripcion;

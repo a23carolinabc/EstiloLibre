@@ -108,7 +108,7 @@ namespace EstiloLibre_CapaNegocio.Comandos
                 }
 
                 // Gestionar imagen compuesta
-                if (!string.IsNullOrEmpty(comando.Conjunto.ImagenCompostaBase64))
+                if (!string.IsNullOrEmpty(comando.Conjunto.ImagenBase64))
                 {
                     if (bEsActualizacion)
                     {
@@ -127,7 +127,7 @@ namespace EstiloLibre_CapaNegocio.Comandos
                     }
 
                     // Procesar imagen (redimensionar, convertir a WebP)
-                    byImagen = await this._servicioAlmacenamiento.ProcesarImagen(comando.Conjunto.ImagenCompostaBase64);
+                    byImagen = await this._servicioAlmacenamiento.ProcesarImagen(comando.Conjunto.ImagenBase64);
 
                     // Crear nuevo adjunto en BD
                     adjunto = this.con.CrearAdjunto();

@@ -1,23 +1,27 @@
-﻿using EstiloLibre_CapaNegocio.Base;
+﻿using EstiloLibre_CapaNegocio.AccesoBD;
+using EstiloLibre_CapaNegocio.Base;
 using EstiloLibre_CapaNegocio.DAOs;
+using System.ComponentModel.DataAnnotations.Schema;
 
-namespace EstiloLibre_CapaNegocio.Objetos;
-
-public class Idioma : ObjetoBD
+namespace EstiloLibre_CapaNegocio.Objetos
 {
-    #region ***** PROPIEDADES *****
+    [Table(TablasBD.Idiomas)]
+    public class Idioma : ObjetoBD
+    {
+        #region ***** PROPIEDADES *****
 
-    public string Codigo { get; set; }
+        public string Codigo { get; set; }
 
-    public string Nombre { get; set; }
+        public string Nombre { get; set; }
 
-    #endregion
+        #endregion
 
-    #region ***** CONSTRUCTORES *****
+        #region ***** CONSTRUCTORES *****
 
-    public Idioma() : base() { }
+        public Idioma() : base() { }
 
-    public Idioma(IdiomasDAO dao) : base(dao) { }
+        public Idioma(IdiomasDAO dao) : base(dao) { }
 
-    #endregion
+        #endregion
+    }
 }

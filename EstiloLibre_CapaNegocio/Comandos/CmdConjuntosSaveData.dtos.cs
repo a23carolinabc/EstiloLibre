@@ -21,7 +21,7 @@ namespace EstiloLibre_CapaNegocio.Comandos
                 public string DatosComposicion { get; set; }
                 public string? NotasPersonales { get; set; }
                 public List<int> PrendasIds { get; set; }
-                public string? ImagenCompostaBase64 { get; set; }
+                public string? ImagenBase64 { get; set; }
             }
         }
     }

@@ -106,37 +106,7 @@ namespace EstiloLibre_CapaNegocio.Consultas
             }
 
             return lista;
-        }
-
-        public async Task<List<PrendaConImagenDTO>> GetPrendasUsuarioParaConjunto(int iUsuarioId)
-        {
-            Prendas prendas;
-            List<PrendaConImagenDTO> lista;
-            Adjuntos adjuntos;
-
-            prendas = this._con.CargarPrendas(iUsuarioId);
-
-            lista = new List<PrendaConImagenDTO>();
-
-            foreach (Prenda prenda in prendas)
-            {
-                PrendaConImagenDTO dto;
-
-                dto = new PrendaConImagenDTO();
-                dto.Id = prenda.Id;
-
-                // Cargar imagen de la prenda
-                adjuntos = this._con.CargarAdjuntos(Codigos.ClasesObjetos.Prenda, prenda.Id);
-                if (adjuntos != null && adjuntos.Count > 0)
-                {
-                    dto.ImagenBase64 = await this._servicioAlmacenamiento.ObtenerImagenBase64(adjuntos.First());
-                }
-
-                lista.Add(dto);
-            }
-
-            return lista;
-        }
+        }        
 
         #endregion
     }

@@ -91,18 +91,18 @@ public class ConjuntosController
         return Ok(objeto);
     }
 
-    [Route("prendasUsuario/{id}")]
-    [HttpGet]
-    [ProducesResponseType(typeof(IEnumerable<PrendaConImagenDTO>), (int)HttpStatusCode.OK)]
-    public async Task<IActionResult> GetPrendasUsuario([FromRoute] int id)
+    [Route("delete/{id}")]
+    [HttpDelete]
+    [ProducesResponseType(typeof(string), (int)HttpStatusCode.OK)]
+    [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+    [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
+    public async Task<IActionResult> Delete([FromRoute] int id)
     {
-        IEnumerable<PrendaConImagenDTO> objeto;
+        CmdConjuntosDelete comando;
 
-        //Recuperar datos necesarios para el showdata.
-        objeto = await this._consultasConjuntos.GetPrendasUsuarioParaConjunto(id);
-
-        //Devolver el resultado de la ejecución.
-        return Ok(objeto);
+        comando = new CmdConjuntosDelete(id);
+        await this._mediador.Send(comando);
+        return Ok();
     }
     #endregion
 }

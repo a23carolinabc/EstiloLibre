@@ -5,6 +5,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using static EstiloLibre_CapaNegocio.Comandos.CmdPrendasSaveData.DTOs;
+using static EstiloLibre_CapaNegocio.Consultas.ConsultasConjuntos.DTOs;
 using static EstiloLibre_CapaNegocio.Consultas.ConsultasPrendas.DTOs;
 
 namespace EstiloLibre.Controllers;
@@ -74,6 +75,20 @@ public class PrendasController
         comando = new CmdPrendasSaveData(objeto);
         iPrendaId = await this._mediador.Send(comando);
         return Ok(iPrendaId);
+    }
+
+    [Route("prendasUsuario/{id}")]
+    [HttpGet]
+    [ProducesResponseType(typeof(IEnumerable<PrendaConImagenDTO>), (int)HttpStatusCode.OK)]
+    public async Task<IActionResult> GetPrendasUsuario([FromRoute] int id)
+    {
+        IEnumerable<PrendaConImagenDTO> objeto;
+
+        //Recuperar datos.
+        objeto = await this._consultasPrendas.GetPrendasUsuarioParaConjunto(id);
+
+        //Devolver el resultado de la ejecución.
+        return Ok(objeto);
     }
     #endregion
 }

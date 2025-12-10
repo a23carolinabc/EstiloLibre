@@ -5,6 +5,7 @@ using EstiloLibre_CapaNegocio.DAOs;
 
 namespace EstiloLibre_CapaNegocio.Objetos
 {
+    [Table(TablasBD.PrendasConjuntos)]
     public class PrendaConjunto : ObjetoBD
     {
         #region ****** PROPIEDADES *****
