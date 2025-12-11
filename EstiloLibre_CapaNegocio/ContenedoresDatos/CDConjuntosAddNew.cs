@@ -49,7 +49,7 @@ namespace EstiloLibre_CapaNegocio.ContenedoresDatos
 
         #region ***** MÉTODOS PÚBLICOS *****
 
-        public override void Cargar()
+        public void Cargar()
         {
             // Ejecutar consulta
             this.EjecutarConsulta();

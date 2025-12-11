@@ -1,13 +1,13 @@
-﻿using MediatR;
-using Microsoft.AspNetCore.Mvc;
-using EstiloLibre.Base;
+﻿using EstiloLibre.Base;
 using EstiloLibre.Servicios;
 using EstiloLibre_CapaNegocio.Comandos;
 using EstiloLibre_CapaNegocio.Consultas;
 using EstiloLibre_CapaNegocio.ObjetosDTO.Seguridad;
+using MediatR;
+using Microsoft.AspNetCore.Mvc;
 using System.Net;
-using static EstiloLibre_CapaNegocio.Comandos.CmdUsuariosDelete;
 using static EstiloLibre_CapaNegocio.Comandos.CmdUsuariosSaveData.DTOs;
+using static EstiloLibre_CapaNegocio.Consultas.ConsultasUsuarios.DTOs;
 
 namespace EstiloLibre.Controllers;
 
@@ -87,6 +87,34 @@ public class UsuariosController
         
         //Devolver respuesta.
         return Ok(strToken);
+    }
+
+    [Route("addnew")]
+    [HttpGet]
+    [ProducesResponseType(typeof(UsuarioAddNewDTO), (int)HttpStatusCode.OK)]
+    public IActionResult AddNew()
+    {
+        UsuarioAddNewDTO objeto;
+
+        //Recuperar datos necesarios para el addnew.
+        objeto = this._consultasUsuarios.GetDatosAddNew();
+
+        //Devolver el resultado de la ejecución.
+        return Ok(objeto);
+    }
+
+    [Route("showdata/{id}")]
+    [HttpGet]
+    [ProducesResponseType(typeof(UsuarioShowDataDTO), (int)HttpStatusCode.OK)]
+    public async Task<IActionResult> ShowData([FromRoute] int id)
+    {
+        UsuarioShowDataDTO objeto;
+
+        //Recuperar datos necesarios para el showdata.
+        objeto = await this._consultasUsuarios.GetDatosShowData(id);
+
+        //Devolver el resultado de la ejecución.
+        return Ok(objeto);
     }
 
     [Route("savedata")]

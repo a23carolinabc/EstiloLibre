@@ -17,10 +17,9 @@ namespace EstiloLibre_CapaNegocio.Objetos
         public string Nombre { get; set; }
         public string Apellido1 { get; set; }
         public string? Apellido2 { get; set; }
-        public DateTime? FechaNacimiento { get; set; }
-        public string? CorreoE { get; set; }
-        public int? Telefono { get; set; }
-        public DateTime? FechaBaja { get; set; }
+        public DateTime FechaNacimiento { get; set; }
+        public string CorreoE { get; set; }
+        public int Telefono { get; set; }
         public bool Publico { get; set; }
         public List<string> Permisos { get; set; }
         

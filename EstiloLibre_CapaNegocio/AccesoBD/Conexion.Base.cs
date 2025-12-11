@@ -53,6 +53,11 @@ namespace EstiloLibre_CapaNegocio.AccesoBD
             return this.GetDAOUsuarios().CargarUsuarioPorLogin(strLogin);
         }
 
+        public Usuario? CargarUsuarioPorCorreo(string strCorreoE)
+        {
+            return this.GetDAOUsuarios().CargarUsuarioPorCorreo(strCorreoE);
+        }
+
         public Usuario? CargarUsuarioActual()
         {
             return this.CargarUsuario(this.UsuarioAutenticado.Id);

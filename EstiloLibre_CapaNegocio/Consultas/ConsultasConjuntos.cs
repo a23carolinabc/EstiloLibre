@@ -66,7 +66,7 @@ namespace EstiloLibre_CapaNegocio.Consultas
             if (objeto.Conjunto.Id > 0)
             {
                 adjuntos = this._con.CargarAdjuntos(Codigos.ClasesObjetos.Conjunto, objeto.Conjunto.Id);
-                if (adjuntos != null && adjuntos.Count > 0)
+                if (adjuntos != null && adjuntos.Any())
                 {
                     objeto.Conjunto.ImagenBase64 = await this._servicioAlmacenamiento.ObtenerImagenBase64(adjuntos.First());
                 }

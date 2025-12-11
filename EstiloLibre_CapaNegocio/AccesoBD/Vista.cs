@@ -31,8 +31,6 @@ namespace EstiloLibre_CapaNegocio.AccesoBD
 
         #region ***** MÉTODOS PÚBLICOS *****
 
-        public virtual void Cargar() { }
-
         protected abstract string DefinirConsultaSql();
 
         protected abstract string[] DefinirNombresTablas();

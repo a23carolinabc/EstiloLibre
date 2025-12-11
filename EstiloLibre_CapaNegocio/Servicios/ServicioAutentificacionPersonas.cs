@@ -59,12 +59,6 @@ namespace EstiloLibre_CapaNegocio.Servicios
                 return new ResultadoAutentificacion(ResultadoAutentificacion.CodigosErrorAutentificacion.ERR_NoEsUsuarioApp);
             }
 
-            //Si la cuenta está desactivada, devolver error.
-            if (usuario.FechaBaja.HasValue)
-            {
-                return new ResultadoAutentificacion(ResultadoAutentificacion.CodigosErrorAutentificacion.ERR_CuentaBloqueada);
-            }
-
             //Si la contraseña hasheada no coinciden, devolver error.
             if (!usuario.Contraseña.Equals(credenciales.Contraseña))
             {
@@ -87,11 +81,12 @@ namespace EstiloLibre_CapaNegocio.Servicios
                 Nombre = usuario.Nombre,
                 Apellidos = usuario.Apellido1 + " " + usuario.Apellido2,
                 Login = usuario.Login,
-                FechaBaja = usuario.FechaBaja,
                 Permisos = usuario.Permisos,
                 CorreoE = usuario.CorreoE,
                 IdiomaActualId = usuario.IdiomaId,
-                CodigoIdiomaActual = idioma!.Codigo
+                CodigoIdiomaActual = idioma!.Codigo,
+                FechaNacimiento = usuario.FechaNacimiento,
+                Telefono = usuario.Telefono,
             };
 
             return new ResultadoAutentificacion(usuarioDTO);

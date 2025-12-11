@@ -32,6 +32,15 @@ namespace EstiloLibre_CapaNegocio.DAOs
 
             return prendasConjuntos;
         }
+
+        public PrendasConjuntos CargarPrendasConjuntosPorPrenda(int iPrendaId)
+        {
+            PrendasConjuntos prendasConjuntos;
+
+            prendasConjuntos = new(this.CargarObjetosBD($"PrendaId = {iPrendaId}"));
+
+            return prendasConjuntos;
+        }
         #endregion
     }    
 }

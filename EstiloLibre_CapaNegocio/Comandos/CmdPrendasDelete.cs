@@ -8,17 +8,17 @@ using MediatR;
 
 namespace EstiloLibre_CapaNegocio.Comandos
 {
-    public partial class CmdConjuntosDelete : ComandoBase, IRequest<bool>
+    public partial class CmdPrendasDelete : ComandoBase, IRequest<bool>
     {
-        public int ConjuntoId { get; set; }
+        public int PrendaId { get; set; }
 
-        public CmdConjuntosDelete(int iConjuntoId) : base([Codigos.Permisos.USER])
+        public CmdPrendasDelete(int iPrendaId) : base([Codigos.Permisos.USER])
         {
-            this.ConjuntoId = iConjuntoId;
+            this.PrendaId = iPrendaId;
         }
     }
 
-    public class PcmdConjuntosDelete : ProcesadorDeComandoBase, IRequestHandler<CmdConjuntosDelete, bool>
+    public class PcmdPrendasDelete : ProcesadorDeComandoBase, IRequestHandler<CmdPrendasDelete, bool>
     {
         #region ***** PROPIEDADES *****
 
@@ -28,7 +28,7 @@ namespace EstiloLibre_CapaNegocio.Comandos
 
         #region ***** CONSTRUCTORES *****
 
-        public PcmdConjuntosDelete(Conexion con) : base(con)
+        public PcmdPrendasDelete(Conexion con) : base(con)
         {
             this._servicioAlmacenamiento = new ServicioAlmacenamiento(con.ConfiguracionEstiloLibre);
         }
@@ -37,9 +37,9 @@ namespace EstiloLibre_CapaNegocio.Comandos
 
         #region ***** MÉTODOS PÚBLICOS *****
 
-        public async Task<bool> Handle(CmdConjuntosDelete comando, CancellationToken cancellationToken)
+        public async Task<bool> Handle(CmdPrendasDelete comando, CancellationToken cancellationToken)
         {
-            Conjunto? conjunto;
+            Prenda? prenda;
             Adjuntos adjuntos;
             PrendasConjuntos conjuntosPrendas;
 
@@ -51,20 +51,27 @@ namespace EstiloLibre_CapaNegocio.Comandos
                 this.con.BeginTrans();
 
                 // Buscar el conjunto
-                conjunto = this.con.CargarConjunto(comando.ConjuntoId);
-                if (conjunto == null)
+                prenda = this.con.CargarPrenda(comando.PrendaId);
+                if (prenda == null)
                 {
                     throw new ReglaNegocioParaUsuarioException("ERR_ObjetoNoEncontrado");
                 }
 
                 // Verificar que sea del usuario autenticado
-                if (conjunto.UsuarioId != this.con.UsuarioAutenticado.Id)
+                if (prenda.UsuarioId != this.con.UsuarioAutenticado.Id)
                 {
                     throw new ReglaNegocioParaUsuarioException("ERR_SinPermisos");
                 }
 
+                // Verificar que no haya conjuntos que usen la prenda
+                conjuntosPrendas = this.con.CargarPrendasConjuntosPorPrendas(prenda.Id);
+                if(conjuntosPrendas != null && conjuntosPrendas.Any())
+                {
+                    throw new ReglaNegocioParaUsuarioException("ERR_PrendaEnConjuntos");
+                }
+
                 // Eliminar adjuntos
-                adjuntos = this.con.CargarAdjuntos(Codigos.ClasesObjetos.Conjunto, conjunto.Id);
+                adjuntos = this.con.CargarAdjuntos(Codigos.ClasesObjetos.Prenda, prenda.Id);
                 foreach (Adjunto adjunto in adjuntos)
                 {
                     // Eliminar archivo físico
@@ -72,17 +79,10 @@ namespace EstiloLibre_CapaNegocio.Comandos
 
                     // Eliminar registro de BD
                     adjunto.Eliminar();
-                }
-
-                // Eliminar relaciones con prendas
-                conjuntosPrendas = this.con.CargarPrendasConjuntos(conjunto.Id);
-                foreach (PrendaConjunto cp in conjuntosPrendas)
-                {
-                    cp.Eliminar();
-                }
+                }               
 
                 // Eliminar el conjunto
-                conjunto.Eliminar();
+                prenda.Eliminar();
 
                 // Confirmar transacción
                 this.con.CommitTrans();

@@ -72,7 +72,7 @@ namespace EstiloLibre_CapaNegocio.Consultas
 
                 // Cargar imagen de la prenda
                 adjuntos = this._con.CargarAdjuntos(Codigos.ClasesObjetos.Prenda, prenda.Id);
-                if (adjuntos != null && adjuntos.Count > 0)
+                if (adjuntos != null && adjuntos.Any())
                 {
                     dto.ImagenBase64 = await this._servicioAlmacenamiento.ObtenerImagenBase64(adjuntos.First());
                 }
