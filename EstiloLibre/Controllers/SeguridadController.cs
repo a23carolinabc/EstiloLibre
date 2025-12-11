@@ -1,9 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using EstiloLibre.Filtros;
+﻿using EstiloLibre.Filtros;
 using EstiloLibre.Servicios;
 using EstiloLibre_CapaNegocio.AccesoBD;
+using EstiloLibre_CapaNegocio.Comandos;
+using EstiloLibre_CapaNegocio.Consultas;
 using EstiloLibre_CapaNegocio.ObjetosDTO.Seguridad;
+using MediatR;
+using Microsoft.AspNetCore.Mvc;
 using System.Net;
+using static EstiloLibre_CapaNegocio.Comandos.CmdNuevoUsuarioSaveData.DTOs;
+using static EstiloLibre_CapaNegocio.Consultas.ConsultasUsuarios.DTOs;
 
 namespace EstiloLibre.Controllers
 {
@@ -17,7 +22,9 @@ namespace EstiloLibre.Controllers
 
         private readonly ServicioIdentidadTokenJwt _servicioIdentidad;
         private readonly ServicioCredencialesCabecera _servicioCredencialesCabecera;
+        private readonly ConsultasUsuarios _consultasUsuarios;
         private readonly Conexion _con;
+        private readonly IMediator _mediador;
 
         #endregion
 
@@ -26,10 +33,14 @@ namespace EstiloLibre.Controllers
         public SeguridadController(ServicioIdentidadTokenJwt servicioIdentidad,
                                    IConfiguration configuration,                                   
                                    Conexion conexion,
-                                   ServicioCredencialesCabecera servicioCredencialesCabecera)
+                                   IMediator mediator,
+                                   ConsultasUsuarios consultasUsuarios,
+                                    ServicioCredencialesCabecera servicioCredencialesCabecera)
         {
+            this._mediador = mediator;
             this._servicioIdentidad = servicioIdentidad;
             this._con = conexion;
+            this._consultasUsuarios = consultasUsuarios;
             this._servicioCredencialesCabecera = servicioCredencialesCabecera;
         }
 
@@ -90,6 +101,35 @@ namespace EstiloLibre.Controllers
 
             //Devolver el resultado de la ejecución.
             return Ok(datosDeSesion);
+        }
+
+        [Route("addnew")]
+        [HttpGet]
+        [ProducesResponseType(typeof(UsuarioAddNewDTO), (int)HttpStatusCode.OK)]
+        public IActionResult AddNew()
+        {
+            UsuarioAddNewDTO objeto;
+
+            //Recuperar datos necesarios para el addnew.
+            objeto = this._consultasUsuarios.GetDatosAddNew();
+
+            //Devolver el resultado de la ejecución.
+            return Ok(objeto);
+        }
+
+        [Route("savedata")]
+        [HttpPost]
+        [ProducesResponseType(typeof(int), (int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
+        public async Task<IActionResult> SaveData([FromBody] NuevoUsuarioSaveDataDTO Usuario)
+        {
+            CmdNuevoUsuarioSaveData comando;
+            int resultado;
+
+            comando = new CmdNuevoUsuarioSaveData(Usuario);
+            resultado = await this._mediador.Send(comando);
+            return Ok(resultado);
         }
 
         #endregion

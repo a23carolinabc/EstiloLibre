@@ -12,7 +12,7 @@ namespace EstiloLibre_CapaNegocio.Comandos
     {
         public int PrendaId { get; set; }
 
-        public CmdPrendasDelete(int iPrendaId) : base([Codigos.Permisos.USER])
+        public CmdPrendasDelete(int iPrendaId) : base()
         {
             this.PrendaId = iPrendaId;
         }
@@ -42,8 +42,6 @@ namespace EstiloLibre_CapaNegocio.Comandos
             Prenda? prenda;
             Adjuntos adjuntos;
             PrendasConjuntos conjuntosPrendas;
-
-            base.VericarPermisos(comando);
 
             try
             {

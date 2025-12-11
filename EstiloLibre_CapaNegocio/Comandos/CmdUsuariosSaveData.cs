@@ -13,7 +13,7 @@ namespace EstiloLibre_CapaNegocio.Comandos
         : ComandoBase, IRequest<int>
     {
         public DTOs.UsuarioSaveDataDTO Usuario { get; set; }
-        public CmdUsuariosSaveData(DTOs.UsuarioSaveDataDTO usuarioSaveData) : base([Codigos.Permisos.USER])
+        public CmdUsuariosSaveData(DTOs.UsuarioSaveDataDTO usuarioSaveData) : base()
         {
             this.Usuario = usuarioSaveData;
         }
@@ -47,8 +47,6 @@ namespace EstiloLibre_CapaNegocio.Comandos
             bool bEsActualizacion;
 
             bEsActualizacion = false;
-
-            base.VericarPermisos(comando);
 
             try
             {

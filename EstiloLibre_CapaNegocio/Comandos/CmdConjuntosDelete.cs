@@ -12,7 +12,7 @@ namespace EstiloLibre_CapaNegocio.Comandos
     {
         public int ConjuntoId { get; set; }
 
-        public CmdConjuntosDelete(int iConjuntoId) : base([Codigos.Permisos.USER])
+        public CmdConjuntosDelete(int iConjuntoId) : base()
         {
             this.ConjuntoId = iConjuntoId;
         }
@@ -43,7 +43,7 @@ namespace EstiloLibre_CapaNegocio.Comandos
             Adjuntos adjuntos;
             PrendasConjuntos conjuntosPrendas;
 
-            base.VericarPermisos(comando);
+            //base.VericarPermisos(comando);
 
             try
             {

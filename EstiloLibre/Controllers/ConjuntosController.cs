@@ -79,10 +79,10 @@ public class ConjuntosController
 
     [Route("conjuntosUsuario/{id}")]
     [HttpGet]
-    [ProducesResponseType(typeof(IEnumerable<Conjunto>), (int)HttpStatusCode.OK)]
+    [ProducesResponseType(typeof(IEnumerable<ConjuntoResumenDTO>), (int)HttpStatusCode.OK)]
     public async Task<IActionResult> GetConjuntosUsuario([FromRoute] int id)
     {
-        IEnumerable<ConjuntoDTO> objeto;
+        IEnumerable<ConjuntoResumenDTO> objeto;
 
         //Recuperar datos necesarios para el showdata.
         objeto = await this._consultasConjuntos.GetConjuntosUsuario(id);

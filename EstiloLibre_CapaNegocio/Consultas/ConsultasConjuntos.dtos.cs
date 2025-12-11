@@ -56,12 +56,10 @@ namespace EstiloLibre_CapaNegocio.Consultas
                 }
             }
 
-            public class PrendaConImagenDTO
+            public class ConjuntoResumenDTO
             {
                 public int Id { get; set; }
                 public string? ImagenBase64 { get; set; }
-                public string? NombreCategoria { get; set; }
-                public string? NombreColor { get; set; }
             }
         }
     }

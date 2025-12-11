@@ -10,7 +10,7 @@ namespace EstiloLibre_CapaNegocio.Comandos
         :ComandoBase, IRequest
     {
         public int UsuarioId { get; set; }
-        public CmdUsuariosDelete(int iUsuarioId) : base([AccesoBD.Codigos.Permisos.USER])
+        public CmdUsuariosDelete(int iUsuarioId) : base()
         {
             this.UsuarioId = iUsuarioId;
         }
@@ -26,9 +26,7 @@ namespace EstiloLibre_CapaNegocio.Comandos
 
         public Task Handle(CmdUsuariosDelete comando, CancellationToken cancellationToken)
         {
-            Usuario Usuario;
-
-            base.VericarPermisos(comando);
+            Usuario? Usuario;
 
             try
             {

@@ -21,6 +21,7 @@ namespace EstiloLibre_CapaNegocio.Objetos
         public string CorreoE { get; set; }
         public int Telefono { get; set; }
         public bool Publico { get; set; }
+        [Write(false)]
         public List<string> Permisos { get; set; }
         
         #endregion

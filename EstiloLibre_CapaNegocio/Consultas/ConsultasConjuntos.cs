@@ -4,6 +4,7 @@ using EstiloLibre_CapaNegocio.ContenedoresDatos;
 using EstiloLibre_CapaNegocio.Objetos;
 using EstiloLibre_CapaNegocio.Servicios;
 using static EstiloLibre_CapaNegocio.Consultas.ConsultasConjuntos.DTOs;
+using static EstiloLibre_CapaNegocio.Consultas.ConsultasPrendas.DTOs;
 
 namespace EstiloLibre_CapaNegocio.Consultas
 {
@@ -79,25 +80,26 @@ namespace EstiloLibre_CapaNegocio.Consultas
             return objeto;
         }
 
-        public async Task<IEnumerable<ConjuntoDTO>> GetConjuntosUsuario(int iUsuarioId)
+        public async Task<IEnumerable<ConjuntoResumenDTO>> GetConjuntosUsuario(int iUsuarioId)
         {
             Conjuntos conjuntos;
-            List<ConjuntoDTO> lista;
+            List<ConjuntoResumenDTO> lista;
             Adjuntos adjuntos;
 
             conjuntos = this._con.CargarConjuntos(iUsuarioId);
 
-            lista = new List<ConjuntoDTO>();
+            lista = new List<ConjuntoResumenDTO>();
 
             foreach (Conjunto conjunto in conjuntos)
             {
-                ConjuntoDTO dto;
+                ConjuntoResumenDTO dto;
 
-                dto = new ConjuntoDTO(conjunto);
+                dto = new ConjuntoResumenDTO();
+                dto.Id = conjunto.Id;
 
-                // Cargar imagen miniatura
+                // Cargar imagen de la prenda
                 adjuntos = this._con.CargarAdjuntos(Codigos.ClasesObjetos.Conjunto, conjunto.Id);
-                if (adjuntos != null && adjuntos.Count > 0)
+                if (adjuntos != null && adjuntos.Any())
                 {
                     dto.ImagenBase64 = await this._servicioAlmacenamiento.ObtenerImagenBase64(adjuntos.First());
                 }

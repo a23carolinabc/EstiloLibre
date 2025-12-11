@@ -79,16 +79,30 @@ public class PrendasController
 
     [Route("prendasUsuario/{id}")]
     [HttpGet]
-    [ProducesResponseType(typeof(IEnumerable<PrendaConImagenDTO>), (int)HttpStatusCode.OK)]
+    [ProducesResponseType(typeof(IEnumerable<PrendaResumenDTO>), (int)HttpStatusCode.OK)]
     public async Task<IActionResult> GetPrendasUsuario([FromRoute] int id)
     {
-        IEnumerable<PrendaConImagenDTO> objeto;
+        IEnumerable<PrendaResumenDTO> objeto;
 
         //Recuperar datos.
-        objeto = await this._consultasPrendas.GetPrendasUsuarioParaConjunto(id);
+        objeto = await this._consultasPrendas.GetPrendasUsuario(id);
 
         //Devolver el resultado de la ejecución.
         return Ok(objeto);
+    }
+
+    [Route("delete/{id}")]
+    [HttpDelete]
+    [ProducesResponseType(typeof(string), (int)HttpStatusCode.OK)]
+    [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+    [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
+    public async Task<IActionResult> Delete([FromRoute] int id)
+    {
+        CmdPrendasDelete comando;
+
+        comando = new CmdPrendasDelete(id);
+        await this._mediador.Send(comando);
+        return Ok();
     }
     #endregion
 }

@@ -14,7 +14,7 @@ namespace EstiloLibre_CapaNegocio.Comandos
         : ComandoBase, IRequest<int>
     {
         public PrendaSaveDataDTO Prenda { get; set; }
-        public CmdPrendasSaveData(PrendaSaveDataDTO prendaSaveData) : base([Codigos.Permisos.USER])
+        public CmdPrendasSaveData(PrendaSaveDataDTO prendaSaveData) : base()
         {
             this.Prenda = prendaSaveData;
         }
@@ -47,7 +47,6 @@ namespace EstiloLibre_CapaNegocio.Comandos
             bool bEsActualizacion;
 
             bEsActualizacion = false;
-            base.VericarPermisos(comando);
 
             try
             {

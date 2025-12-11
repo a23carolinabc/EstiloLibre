@@ -62,6 +62,12 @@ namespace EstiloLibre_CapaNegocio.Consultas
                     this.FechaCompra = prenda.FechaCompra;
                 }
             }
+
+            public class PrendaResumenDTO
+            {
+                public int Id { get; set; }
+                public string? ImagenBase64 { get; set; }
+            }
         }
     }
 }

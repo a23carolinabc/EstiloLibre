@@ -14,7 +14,7 @@ namespace EstiloLibre_CapaNegocio.Comandos
     {
         public ConjuntoSaveDataDTO Conjunto { get; set; }
 
-        public CmdConjuntosSaveData(ConjuntoSaveDataDTO conjuntoSaveData) : base([Codigos.Permisos.USER])
+        public CmdConjuntosSaveData(ConjuntoSaveDataDTO conjuntoSaveData) : base()
         {
             this.Conjunto = conjuntoSaveData;
         }
@@ -48,7 +48,6 @@ namespace EstiloLibre_CapaNegocio.Comandos
             PrendasConjuntos conjuntosPrendasAntiguos;
 
             bEsActualizacion = false;
-            base.VericarPermisos(comando);
 
             try
             {

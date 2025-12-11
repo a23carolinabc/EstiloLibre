@@ -3,7 +3,6 @@ using EstiloLibre_CapaNegocio.Colecciones;
 using EstiloLibre_CapaNegocio.ContenedoresDatos;
 using EstiloLibre_CapaNegocio.Objetos;
 using EstiloLibre_CapaNegocio.Servicios;
-using static EstiloLibre_CapaNegocio.Consultas.ConsultasConjuntos.DTOs;
 using static EstiloLibre_CapaNegocio.Consultas.ConsultasPrendas.DTOs;
 
 namespace EstiloLibre_CapaNegocio.Consultas
@@ -53,21 +52,21 @@ namespace EstiloLibre_CapaNegocio.Consultas
             return dto;
         }
 
-        public async Task<List<PrendaConImagenDTO>> GetPrendasUsuarioParaConjunto(int iUsuarioId)
+        public async Task<IEnumerable<PrendaResumenDTO>> GetPrendasUsuario(int iUsuarioId)
         {
             Prendas prendas;
-            List<PrendaConImagenDTO> lista;
+            List<PrendaResumenDTO> lista;
             Adjuntos adjuntos;
 
             prendas = this._con.CargarPrendas(iUsuarioId);
 
-            lista = new List<PrendaConImagenDTO>();
+            lista = new List<PrendaResumenDTO>();
 
             foreach (Prenda prenda in prendas)
             {
-                PrendaConImagenDTO dto;
+                PrendaResumenDTO dto;
 
-                dto = new PrendaConImagenDTO();
+                dto = new PrendaResumenDTO();
                 dto.Id = prenda.Id;
 
                 // Cargar imagen de la prenda
