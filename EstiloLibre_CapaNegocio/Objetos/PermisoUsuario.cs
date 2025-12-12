@@ -1,25 +1,24 @@
 ﻿using EstiloLibre_CapaNegocio.AccesoBD;
 using EstiloLibre_CapaNegocio.Base;
-using EstiloLibre_CapaNegocio.DAOs;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EstiloLibre_CapaNegocio.Objetos
 {
-    [Table(TablasBD.Permisos)]
-    public class Permiso : ObjetoBD
+    [Table(TablasBD.PermisosUsuarios)]
+    public class PermisoUsuario : ObjetoBD
     {
         #region ***** PROPIEDADES *****
 
-        public string Codigo { get; set; }
-        public string Descripcion { get; set; }
+        public int UsuarioId { get; set; }
+        public int PermisoId { get; set; }
 
         #endregion
 
         #region ***** CONSTRUCTORES *****
 
-        public Permiso() : base() { }
+        public PermisoUsuario() : base() { }
 
-        public Permiso(PermisosDAO objetoDAO) : base(objetoDAO) { }
+        public PermisoUsuario(DAO<PermisoUsuario> dao) : base(dao) { }
 
         #endregion
     }

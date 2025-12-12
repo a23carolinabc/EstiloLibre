@@ -11,6 +11,7 @@
         internal class Permisos
         {
             public const string ADMIN = "ADMIN";
+            public const string ADMINPLUS = "ADMINPLUS";
             public const string USER = "USER";
         }
 

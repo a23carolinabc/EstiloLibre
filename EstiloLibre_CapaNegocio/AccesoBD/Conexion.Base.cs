@@ -87,5 +87,123 @@ namespace EstiloLibre_CapaNegocio.AccesoBD
             return this.GetDAOAdjuntos().CargarAdjuntos(iClaseObjetoId, iObjetoId);
         }
         #endregion
+
+        #region Permisos
+
+        public PermisosDAO GetDAOPermisos()
+        {
+            return new PermisosDAO(this);
+        }
+
+        public Permiso CrearPermiso()
+        {
+            return (Permiso)this.GetDAOPermisos().CrearObjetoBD();
+        }
+
+        public Permiso? CargarPermiso(int iPermisoId)
+        {
+            return this.GetDAOPermisos().CargarPermiso(iPermisoId);
+        }
+
+        public Permiso? CargarPermisoPorCodigo(string strCodigo)
+        {
+            return this.GetDAOPermisos().CargarPermisoPorCodigo(strCodigo);
+        }
+
+        public Permisos CargarPermisos(List<int> lstPermisosIds)
+        {
+            return this.GetDAOPermisos().CargarPermisos(lstPermisosIds);
+        }
+
+        public Permisos CargarTodosLosPermisos()
+        {
+            return this.GetDAOPermisos().CargarTodosLosPermisos();
+        }
+
+        #endregion
+
+        #region PermisosUsuarios
+
+        public PermisosUsuariosDAO GetDAOPermisosUsuarios()
+        {
+            return new PermisosUsuariosDAO(this);
+        }
+
+        public PermisoUsuario CrearPermisoUsuario()
+        {
+            return (PermisoUsuario)this.GetDAOPermisosUsuarios().CrearObjetoBD();
+        }
+
+        public PermisoUsuario? CargarPermisoUsuario(int iPermisoUsuarioId)
+        {
+            return this.GetDAOPermisosUsuarios().CargarPermisoUsuario(iPermisoUsuarioId);
+        }
+
+        /// <summary>
+        /// Carga los permisos asignados a un usuario
+        /// </summary>
+        public Permisos CargarPermisosUsuario(int iUsuarioId)
+        {
+            PermisosUsuariosDAO daoPermisosUsuarios;
+            PermisosDAO daoPermisos;
+            PermisosUsuarios permisosUsuarios;
+            List<int> lstPermisosIds;
+            Permisos permisos;
+
+            daoPermisosUsuarios = this.GetDAOPermisosUsuarios();
+            daoPermisos = this.GetDAOPermisos();
+
+            // Cargar relaciones PermisoUsuario
+            permisosUsuarios = daoPermisosUsuarios.CargarPermisosPorUsuario(iUsuarioId);
+
+            // Obtener IDs de permisos
+            lstPermisosIds = permisosUsuarios.Select(pu => pu.PermisoId).ToList();
+
+            // Cargar objetos Permiso
+            if (lstPermisosIds.Any())
+            {
+                permisos = daoPermisos.CargarPermisos(lstPermisosIds);
+            }
+            else
+            {
+                permisos = new Permisos();
+            }
+
+            return permisos;
+        }
+
+        /// <summary>
+        /// Asigna una lista de permisos a un usuario
+        /// </summary>
+        public void AsignarPermisosAUsuario(int iUsuarioId, List<int> lstPermisosIds)
+        {
+            PermisoUsuario permisoUsuario;
+
+            if (lstPermisosIds == null || !lstPermisosIds.Any())
+            {
+                return;
+            }
+
+            foreach (int iPermisoId in lstPermisosIds)
+            {
+                permisoUsuario = this.CrearPermisoUsuario();
+                permisoUsuario.UsuarioId = iUsuarioId;
+                permisoUsuario.PermisoId = iPermisoId;
+                permisoUsuario.Guardar();
+            }
+        }
+
+        /// <summary>
+        /// Elimina todos los permisos de un usuario
+        /// </summary>
+        public void EliminarPermisosDeUsuario(int iUsuarioId)
+        {
+            PermisosUsuariosDAO dao;
+
+            dao = this.GetDAOPermisosUsuarios();
+            dao.EliminarPermisosPorUsuario(iUsuarioId);
+        }
+
+        #endregion
     }
 }

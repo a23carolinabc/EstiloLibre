@@ -204,7 +204,7 @@ namespace EstiloLibre_CapaNegocio.Base
             return lista;
         }
 
-        public ListaObjetosBD<T> CargarObjetosBD(string clausulaWhere, string? orderBy = null)
+        public ListaObjetosBD<T> CargarObjetosBD(string? clausulaWhere= null, string? orderBy = null)
         {
             List<T> resultado;
             string strSql;

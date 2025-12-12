@@ -1,9 +1,7 @@
 ﻿using EstiloLibre_CapaNegocio.AccesoBD;
 using EstiloLibre_CapaNegocio.Colecciones;
 using EstiloLibre_CapaNegocio.Objetos;
-using EstiloLibre_CapaNegocio.Utils;
 using MySqlConnector;
-using System.Data;
 
 namespace EstiloLibre_CapaNegocio.ContenedoresDatos
 {

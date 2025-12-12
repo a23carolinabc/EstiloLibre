@@ -86,6 +86,16 @@ namespace EstiloLibre_CapaNegocio.AccesoBD
             return this.GetDAOPrendasConjuntos().CargarPrendasConjuntosPorPrenda(iPrendaId);
         }
 
+        public PrendasConjuntos CargarPrendasConjuntosPorPrenda(int iPrendaId)
+        {
+            return this.GetDAOPrendasConjuntos().CargarPrendasConjuntosPorPrenda(iPrendaId);
+        }
+
+        public PrendasConjuntos CargarPrendasConjuntosPorConjunto(int iConjuntoId)
+        {
+            return this.GetDAOPrendasConjuntos().CargarPrendasConjuntosPorConjunto(iConjuntoId);
+        }
         #endregion
+
     }
 }
